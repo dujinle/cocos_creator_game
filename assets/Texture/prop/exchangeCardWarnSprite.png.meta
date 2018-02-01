@@ -1,0 +1,30 @@
+{
+  "ver": "1.0.0",
+  "uuid": "5f51dcaa-937e-4ef1-be7d-c711b6baea37",
+  "type": "sprite",
+  "wrapMode": "clamp",
+  "filterMode": "bilinear",
+  "subMetas": {
+    "exchangeCardWarnSprite": {
+      "ver": "1.0.3",
+      "uuid": "bedae98c-3e0d-4179-bad5-e2de99caef34",
+      "rawTextureUuid": "5f51dcaa-937e-4ef1-be7d-c711b6baea37",
+      "trimType": "auto",
+      "trimThreshold": 1,
+      "rotated": false,
+      "offsetX": 0,
+      "offsetY": 0.5,
+      "trimX": 0,
+      "trimY": 0,
+      "width": 80,
+      "height": 113,
+      "rawWidth": 80,
+      "rawHeight": 114,
+      "borderTop": 0,
+      "borderBottom": 0,
+      "borderLeft": 0,
+      "borderRight": 0,
+      "subMetas": {}
+    }
+  }
+}
