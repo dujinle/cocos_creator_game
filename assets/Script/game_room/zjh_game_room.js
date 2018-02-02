@@ -96,6 +96,13 @@ cc.Class({
 			size.width/2,size.height + g_dealCardBack.getContentSize().height/2));
 		g_dealCardBack.setPosition(position);
 		this.node.addChild(g_dealCardBack);
+		
+		//添加滚动字幕
+		this.msage_scroll = cc.instantiate(g_assets["msage_scroll"]);
+		this.node.addChild(this.msage_scroll);
+		var x = size.width/2;
+		var y = size.height - 120;
+		this.msage_scroll.setPosition(this.node.convertToNodeSpaceAR(cc.p(x,y)));
 	},
 	initButtonEnableAfterComeInRoom(){
 		this.bipai_button.getComponent(cc.Button).interactable = false;
@@ -325,6 +332,8 @@ cc.Class({
 		pomelo.on('onEnd',this.onEnd_function.bind(this));
 		pomelo.on('onEndPai',this.onEndPai_function.bind(this));
 		pomelo.on('onAddChip',this.onAddChip_function.bind(this));
+		pomelo.on('onActBroadcast',this.onUserBroadcast_function.bind(this));
+
 
     },
 	onReady_function(data){
@@ -774,7 +783,11 @@ cc.Class({
 			this.openAllCard(null,winnerCardType);
 		}
 	},
-	
+	onUserBroadcast_function(data){
+		console.log("onUserBroadcast:"+JSON.stringify(data));
+		var msage_scroll_com = this.msage_scroll.getComponent("msage_scroll");
+		msage_scroll_com.set_string(data);
+	},
 	
 	
 	actionFaPai(){
@@ -1117,6 +1130,8 @@ cc.Class({
         pomelo.removeListener('onShoupai');
         pomelo.removeListener('onChangePlayer');
         pomelo.removeListener('onEndPai');
+		pomelo.removeListener('onActBroadcast');
+		
         //pomelo.removeListener('onChatInGame',onChatInGame_function);
         //pomelo.removeListener('onActBroadcast',onActBroadcast_function);
         //pomelo.removeListener('onUserBroadcast',onUserBroadcast_function);
