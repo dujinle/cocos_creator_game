@@ -1,13 +1,3 @@
-// Learn cc.Class:
-//  - [Chinese] http://www.cocos.com/docs/creator/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/class/index.html
-// Learn Attribute:
-//  - [Chinese] http://www.cocos.com/docs/creator/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/reference/attributes/index.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://www.cocos.com/docs/creator/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/life-cycle-callbacks/index.html
-
 cc.Class({
     extends: cc.Component,
 
@@ -25,6 +15,7 @@ cc.Class({
 		status_sprite:cc.Sprite,
 		nick_name_label:cc.Label,
 		gold_label:cc.Label,
+		equalCard:null,
 		my_cards:{
 			type:cc.Node,
 			default:[]
@@ -40,7 +31,7 @@ cc.Class({
 		this.my_gold = params[4];
 		this.nick_name_label.getComponent(cc.Label).string = this.nick_name;
 		this.gold_label.getComponent(cc.Label).string = this.my_gold;
-		this.init_cards();
+		this.init_cards_info(g_fapaiNum,params[6]);
 	},
 	start_timer(){
 		var count_timer = this.counter_timer.getComponent("count_timer");
@@ -54,6 +45,41 @@ cc.Class({
 		console.log("zjh_player setSpriteStatus:" + status);
 		this.status_sprite.spriteFrame = g_assets[status];
 		this.status_sprite.node.active = true;
+	},
+	init_cards_info(card_num,paiXing){
+        this.my_cards = new Array();
+		if(paiXing == null || paiXing == "null"){
+			for(var i = 0;i< card_num;i++){
+				var card = cc.instantiate(g_assets["zjh_card"]);
+				this.node.parent.addChild(card);
+				this.my_cards.push(card);
+			}
+		}else{
+			for(var i = 1;i < 6;i++){
+				var p = paiXing["p" + i];
+				var s = paiXing["s" + i];
+				console.log("p:" + p + " s:" + s);
+				if(p){
+					var card = cc.instantiate(g_assets["zjh_card"]);
+					var card_com = card.getComponent("zjh_card");
+					card_com.initCardSprite(parseInt(s),parseInt(p));
+					this.node.parent.addChild(card);
+					this.my_cards.push(card);
+				}else{
+					break;
+				}
+			}
+		}
+    },
+	addPlayerCard(){
+		var card = cc.instantiate(g_assets["zjh_card"]);
+		this.node.parent.addChild(card);
+		this.my_cards.push(card);
+	},
+	addEqualCard(){
+		this.equalCard = cc.instantiate(g_assets["zjh_card"]);
+		this.node.parent.addChild(this.equalCard);
+		return this.equalCard;
 	},
 	init_cards(){
 		for(var i = 0;i < 3;i++){
@@ -80,5 +106,4 @@ cc.Class({
 		this.my_gold = money;
 		this.gold_label.string = money;
 	}
-	// update (dt) {},
 });

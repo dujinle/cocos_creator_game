@@ -1037,7 +1037,7 @@ cc.Class({
 			y = player.getPositionY();
 		}else if(player_com.player_position == 2){
 			x = player.getPositionX() - (5-m)*30;
-			y = player.getPositionY() + player_com.mobile_sprite.node.height + 30;
+			y = player.getPositionY();
 		}else if(player_com.player_position == 3){
 			x = player.getPositionX() - (5-m)*30;
 			y = player.getPositionY() - player_com.mobile_sprite.node.height - 30;
