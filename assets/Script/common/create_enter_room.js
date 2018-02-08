@@ -59,7 +59,7 @@ var room_create = function(param,callback){
 				cc.director.loadScene("ZJHRoomScene");
 			}else if(g_game_type == "TDK"){
 				g_fapaiNum = data1["fapai_num"];
-				cc.director.runScene(new TDKGameScene());
+				cc.director.loadScene("TDKRoomScene");
 			}else if(g_game_type == "ZHQ"){
 				cc.director.runScene(new ZHQGameScene())
 			}
@@ -120,7 +120,7 @@ var room_enter = function(param,callback){
 				cc.director.loadScene("ZJHRoomScene");
 			}else if(g_game_type == "TDK"){
 				g_fapaiNum = data1["fapai_num"];
-				cc.director.runScene(new TDKGameScene());
+				cc.director.loadScene("TDKRoomScene");
 			}else if(g_game_type == "ZHQ"){
 				cc.director.runScene(new ZHQGameScene())
 			}

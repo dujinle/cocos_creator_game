@@ -598,7 +598,7 @@ cc.Class({
 		var playerName = data["user"];
 		var isFind = false;
 		for(var i = 0;i < g_players.length;i++){
-			var player = all_players[i];
+			var player = g_players[i];
 			var player_com = player.getComponent("zjh_player");
 			if(player_com == playerName){
 				cc.log("quit from zjh room g_players");
@@ -611,7 +611,7 @@ cc.Class({
 		}
 		if(isFind==false){
 			for(var i = 0;i < g_players_noPower.length;i++){
-				var player = all_players[i];
+				var player = g_players_noPower[i];
 				var player_com = player.getComponent("zjh_player");
 				if(player_com == playerName){
 					cc.log("quit from zjh room g_players_noPower");

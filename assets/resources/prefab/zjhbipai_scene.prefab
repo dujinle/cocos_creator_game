@@ -1859,7 +1859,11 @@
     "dianshan": {
       "__id__": 55
     },
-    "bipai_time": 4.8
+    "is_finish": false,
+    "is_start": false,
+    "anim": null,
+    "animStatus": null,
+    "duration": 0
   },
   {
     "__type__": "cc.PrefabInfo",

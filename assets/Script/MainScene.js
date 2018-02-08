@@ -20,7 +20,7 @@ cc.Class({
     onLoad () {
         cc.log("on load main scene.....");
 		window.g_game_type = "ZJH";
-		self = this;
+		var self = this;
 		self.username_label.string = g_user.nickName;
         self.fangka_label.string = g_user.fangka;
         self.diamond_label.string = g_user.diamond;

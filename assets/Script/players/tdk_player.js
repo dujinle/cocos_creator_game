@@ -5,7 +5,9 @@ cc.Class({
 		id:0,
 		nick_name:null,
 		my_gold:0,
+		my_scole:0,
 		position_server:0,
+		statusTag:null,
 		player_position:0,
 		check_card:false,
 		is_power:0,
@@ -20,7 +22,6 @@ cc.Class({
 			type:cc.Node,
 			default:[]
 		},
-		
     },
 	init(params){
 		cc.log("zjh_player init: " + JSON.stringify(params));
@@ -91,6 +92,13 @@ cc.Class({
 	set_card_sprite(idx,suit,rank){
 		var card = this.my_cards[idx].getComponent("zjh_card");
 		card.initCardSprite(suit,rank);
+	},
+	get_last_card(){
+		var last_card = null;
+		for(var i = 0;i < this.my_cards.length;i++){
+			last_card = this.my_cards[i];
+		}
+		return last_card;
 	},
 	remove_cards(){
 		for(var i = 0;i < this.my_cards.length;i++){

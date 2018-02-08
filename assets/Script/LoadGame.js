@@ -23,8 +23,8 @@ cc.Class({
     loadUserInfo() {
         var self = this;
         console.log("start loadUserInfo......");
-        var userId   = Storage.getUserId();
-        var password = Storage.getPassword();
+        var userId   = 0;//Storage.getUserId();
+        var password = 0;//Storage.getPassword();
 
         var imei     = Storage.getImei();
         //only for test
@@ -69,7 +69,7 @@ cc.Class({
         cc.director.loadScene("MainScene");
     },
     onLoad () {
-		this.source_leng = 74;
+		this.source_leng = 82;
 		this.load_res();
         this.schedule(this.load_update,0.5);
     },
