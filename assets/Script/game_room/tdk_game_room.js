@@ -174,10 +174,10 @@ cc.Class({
 			var player_com = player.getComponent("tdk_player");
 			player_com.init(player_stc);
 			player_com.player_position = i + 1;
-			if(self.roomState == 1){
-				g_players_noPower.push(player);
-			}else{
+			if(player_com.is_power > 0){
 				g_players.push(player);
+			}else{
+				g_players_noPower.push(player);
 			}
 			player.active = true;
 		}
@@ -198,7 +198,7 @@ cc.Class({
 			var player = all_players[i];
 			var player_com = player.getComponent("tdk_player");
             if(player_com.is_power == 2){
-				for(var m = 0;m < 3;m++){
+				for(var m = 0;m < player_com.my_cards.length;m++){
 					var position = this.calc_player_card_position(player,m);
 					player_com.my_cards[m].setPosition(position);
 				}
@@ -328,10 +328,10 @@ cc.Class({
 			var player = g_players[i];
 			var player_com = player.getComponent("tdk_player");
 			if(player_com.position_server == g_myselfPlayerPos){
-				var x = size.width/2;
+				var x = 0;
 				var y = player.getPositionY() + player_com.mobile_sprite.node.height + 30;
 				this.node.addChild(pop_add_chip);
-				pop_add_chip.setPosition(this.node.convertToNodeSpaceAR(cc.p(x,y)));
+				pop_add_chip.setPosition(cc.p(x,y));
 				break;
 			}
 		}
@@ -514,7 +514,7 @@ cc.Class({
 			for(var i=0;i < g_players.length;i++){
 				var player = g_players[i];
 				var player_com = player.getComponent("tdk_player");
-				this.actionBottomBet(this.node.convertToNodeSpaceAR(player.getPosition()));
+				this.actionBottomBet(player.getPosition());
 				player_com.resetMoneyLabel(player_com.my_gold - this.bet);
 				if(player_com.position_server == this.currentGetPowerPlayerPosition){
 					player_com.setSpriteStatus("shou");
@@ -756,7 +756,7 @@ cc.Class({
 		for(var i = 0;i < g_players.length;i++){
 			var player = g_players[i];
 			var player_com = player.getComponent("tdk_player");
-			if(player_com == playerName){
+			if(player_com.id == playerName){
 				cc.log("quit from zjh room g_players");
 				player_com.remove_cards();
 				player.active = false;
@@ -769,7 +769,7 @@ cc.Class({
 			for(var i = 0;i < g_players_noPower.length;i++){
 				var player = g_players_noPower[i];
 				var player_com = player.getComponent("tdk_player");
-				if(player_com == playerName){
+				if(player_com.id == playerName){
 					cc.log("quit from zjh room g_players_noPower");
 					player_com.remove_cards();
 					player.active = false;
@@ -968,8 +968,7 @@ cc.Class({
 		var msage_scroll_com = this.msage_scroll.getComponent("msage_scroll");
 		msage_scroll_com.set_string(data);
 	},
-	
-	
+
 	actionFaPai(){
     	var size=cc.director.getVisibleSize();
     	var isFind=false;
@@ -1029,7 +1028,7 @@ cc.Class({
 			var player_com = player.getComponent("tdk_player");
 			var position = this.calc_player_card_position(player,this.fapai_count - 1);
 			cc.log("position:x:" + position.x + " y:" + position.y);
-			var acMoveDown1 = cc.moveTo(0.2,cc.p(size.width/2,size.height/2));
+			var acMoveDown1 = cc.moveTo(0.2,this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
 			var acToCardPlayer = cc.moveTo(0.1,position);
 			var callFunc = cc.callFunc(this.actionFaPai,this);
 			var card = player_com.my_cards[this.fapai_count - 1];
@@ -1059,7 +1058,7 @@ cc.Class({
 				var round_num = player_com.my_cards.length;
 				var position = this.calc_player_card_position(player,round_num - 1);
 				cc.log("position:x:" + position.x + " y:" + position.y);
-				var acMoveDown1 = cc.moveTo(0.2,cc.p(size.width/2,size.height/2));
+				var acMoveDown1 = cc.moveTo(0.2,this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
 				var acToCardPlayer = cc.moveTo(0.1,position);
 
 				var card = player_com.my_cards[round_num - 1];
@@ -1105,7 +1104,7 @@ cc.Class({
 				var round_num = player_com.my_cards.length;
 				var position = this.calc_player_card_position(player,round_num - 1);
 				cc.log("position:x:" + position.x + " y:" + position.y);
-				var acMoveDown1 = cc.moveTo(0.2,cc.p(size.width/2,size.height/2));
+				var acMoveDown1 = cc.moveTo(0.2,this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
 				var acToCardPlayer = cc.moveTo(0.1,position);
 
 				var card = player_com.my_cards[round_num - 1];
@@ -1296,7 +1295,7 @@ cc.Class({
 	},
 	actionWinnerGetBet(my_this,playerPosition){
         for(var j in this.betPhotoArray){
-            var getBetAction =  cc.moveTo(1.0, this.node.convertToNodeSpaceAR(cc.p(playerPosition)));
+            var getBetAction =  cc.moveTo(1.0, playerPosition);
             this.betPhotoArray[j].runAction(cc.sequence(getBetAction,cc.hide()));
         }
 		//初始化房间状态为非游戏状态
