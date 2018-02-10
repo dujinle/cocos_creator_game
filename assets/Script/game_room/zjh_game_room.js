@@ -1119,13 +1119,25 @@ cc.Class({
         }
     },
 	biPaiSelectCallBack(index){
-		pomelo.request(util.getGameRoute(), {
-			process: "bipai",
-			location1: g_myselfPlayerPos,
-			location2: index + 1
-		}, function (data) {
-			cc.log(JSON.stringify(data));
-		});
+		var localtion1 = g_myselfPlayerPos;
+		var localtion2 = null;
+		for(var i = 0;i < g_players.length;i++){
+			var player = g_players[i];
+			var player_com = player.getComponent("zjh_player");
+			if(player_com.player_position == (index + 1)){
+				localtion2 = player_com.position_server;
+				break;
+			}
+		}
+		if(localtion2 != null){
+			pomelo.request(util.getGameRoute(), {
+				process: "bipai",
+				location1: g_myselfPlayerPos,
+				location2: localtion2
+			}, function (data) {
+				cc.log(JSON.stringify(data));
+			});
+		}
 	},
 	pomelo_removeListener(){
 		cc.log("remove listener");
