@@ -285,10 +285,10 @@ cc.Class({
 			var player = g_players[i];
 			var player_com = player.getComponent("zjh_player");
 			if(player_com.position_server == g_myselfPlayerPos){
-				var x = size.width/2;
+				var x = 0;
 				var y = player.getPositionY() + player_com.mobile_sprite.node.height + 30;
 				this.node.addChild(pop_add_chip);
-				pop_add_chip.setPosition(this.node.convertToNodeSpaceAR(cc.p(x,y)));
+				pop_add_chip.setPosition(cc.p(x,y));
 				break;
 			}
 		}
@@ -904,7 +904,7 @@ cc.Class({
 			//移动到比牌位置动作
 			var card_pos = bipai_ui_com.get_card_position(bipai_ui_com.left_cards[j]);
 			var bipai_position = cc.p(size.width/2 + card_pos.x,size.height/2 + card_pos.y);
-			var moveToBiPaiPosition = cc.moveTo(1.5,bipai_position);
+			var moveToBiPaiPosition = cc.moveTo(1.5,card_pos);
 			//移动到原来的位置
 			var moveToOriginPosition = cc.moveTo(1.5,cardPosition[j]);
 			var _seqBack=cc.sequence(moveToBiPaiPosition,cc.delayTime(2),moveToOriginPosition);
@@ -915,7 +915,7 @@ cc.Class({
 			//移动到比牌位置动作
 			var card_pos = bipai_ui_com.get_card_position(bipai_ui_com.right_cards[j]);
 			var bipai_position = cc.p(size.width/2 + card_pos.x,size.height/2 + card_pos.y);
-			var moveToBiPaiPosition = cc.moveTo(1.5,bipai_position);
+			var moveToBiPaiPosition = cc.moveTo(1.5,card_pos);
 			//移动到原来的位置
 			var moveToOriginPosition = cc.moveTo(1.5,cardPositionOther[j]);
 			var _seqBack=cc.sequence(moveToBiPaiPosition,cc.delayTime(2),moveToOriginPosition);
@@ -1087,10 +1087,12 @@ cc.Class({
     },
 	displayLoser(mythis,loserPositionServer){
     	var tmp_allplayers = g_players_noPower.concat(g_players);
-        for(var i=0;i < tmp_allplayers.length;i++){
-			var player_com = tmp_allplayers[i].getComponent("zjh_player");
+        for(var i=0;i < g_players.length;i++){
+			var player_com = g_players[i].getComponent("zjh_player");
             if(player_com.position_server == loserPositionServer){
             	player_com.setSpriteStatus("loser");
+				g_players_noPower.push(g_players[i]);
+				g_players.splice(i,1);
                 break;
             }
         }

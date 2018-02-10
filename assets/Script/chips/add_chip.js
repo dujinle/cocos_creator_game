@@ -5,7 +5,7 @@ cc.Class({
 		callback:null,
     },
     onLoad () {
-		cc.log("start go into select comparejs");
+		cc.log("start go into pop add chip js");
 		var self = this;
 		self.node.on("pressed", self.switchRadio, self);
         cc.eventManager.addListener({
