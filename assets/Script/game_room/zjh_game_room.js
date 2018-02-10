@@ -152,7 +152,7 @@ cc.Class({
 			var player_com = player.getComponent("zjh_player");
 			player_com.init(player_stc);
 			player_com.player_position = i + 1;
-			if(self.roomState == 1){
+			if(player_com.is_power == 0){
 				g_players_noPower.push(player);
 			}else{
 				g_players.push(player);
@@ -171,9 +171,8 @@ cc.Class({
     	}
     },
 	initPlayerCardsPosition(){
-		var all_players = g_players.concat(g_players_noPower);
-        for(var i=0;i < all_players.length;i++){
-			var player = all_players[i];
+        for(var i=0;i < g_players.length;i++){
+			var player = g_players[i];
 			var player_com = player.getComponent("zjh_player");
             if(player_com.is_power == 2){
 				for(var m = 0;m < 3;m++){
@@ -266,6 +265,7 @@ cc.Class({
 			pop_bipai_select_com.set_callback(this.biPaiSelectCallBack);
 			this.node.addChild(pop_bipai_select);
 			pop_bipai_select.setPosition(this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
+			cc.log("SiblingIndex",pop_bipai_select.getSiblingIndex());
         }
     },
 	callback_jiazhu(){
@@ -385,6 +385,7 @@ cc.Class({
 		t_player.push(playerInfo["nickName"]);
 		t_player.push(playerInfo["gold"]);
 		t_player.push(playerInfo["gender"]);
+		t_player.push(playerInfo["mark"]);
 		
 		//确定新加入玩家的客户端位置
 		var idx = 0;
@@ -466,7 +467,7 @@ cc.Class({
 			for(var i=0;i < g_players.length;i++){
 				var player = g_players[i];
 				var player_com = player.getComponent("zjh_player");
-				this.actionBottomBet(this.node.convertToNodeSpaceAR(player.getPosition()));
+				this.actionBottomBet(player.getPosition());
 				player_com.resetMoneyLabel(player_com.my_gold - this.bet);
 				if(player_com.position_server == this.currentGetPowerPlayerPosition){
 					player_com.setSpriteStatus("shou");
@@ -600,7 +601,7 @@ cc.Class({
 		for(var i = 0;i < g_players.length;i++){
 			var player = g_players[i];
 			var player_com = player.getComponent("zjh_player");
-			if(player_com == playerName){
+			if(player_com.id == playerName){
 				cc.log("quit from zjh room g_players");
 				player_com.remove_cards();
 				player.active = false;
@@ -613,7 +614,7 @@ cc.Class({
 			for(var i = 0;i < g_players_noPower.length;i++){
 				var player = g_players_noPower[i];
 				var player_com = player.getComponent("zjh_player");
-				if(player_com == playerName){
+				if(player_com.id == playerName){
 					cc.log("quit from zjh room g_players_noPower");
 					player_com.remove_cards();
 					player.active = false;
@@ -850,7 +851,7 @@ cc.Class({
 			var player_com = player.getComponent("zjh_player");
 			var position = this.calc_player_card_position(player,this.fapai_count - 1);
 			cc.log("position:x:" + position.x + " y:" + position.y);
-			var acMoveDown1 = cc.moveTo(0.2,cc.p(size.width/2,size.height/2));
+			var acMoveDown1 = cc.moveTo(0.2,this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
 			var acToCardPlayer = cc.moveTo(0.1,position);
 			var callFunc = cc.callFunc(this.actionFaPai,this);
 			var card = player_com.my_cards[this.fapai_count - 1];
@@ -1036,10 +1037,10 @@ cc.Class({
 			x = player.getPositionX() + player_com.mobile_sprite.node.getContentSize().width + g_dealCardBack.getContentSize().width/2*(m);
 			y = player.getPositionY();
 		}else if(player_com.player_position == 2){
-			x = player.getPositionX() - (5-m)*30;
+			x = player.getPositionX() - (3-m)*30;
 			y = player.getPositionY() + player_com.mobile_sprite.node.height + 30;
 		}else if(player_com.player_position == 3){
-			x = player.getPositionX() - (5-m)*30;
+			x = player.getPositionX() - (3-m)*30;
 			y = player.getPositionY() - player_com.mobile_sprite.node.height - 30;
 		}else if(player_com.player_position == 4){
 			x = player.getPositionX() + m*30;
@@ -1099,7 +1100,7 @@ cc.Class({
     },
 	actionWinnerGetBet(my_this,playerPosition){
         for(var j in this.betPhotoArray){
-            var getBetAction =  cc.moveTo(1.0, this.node.convertToNodeSpaceAR(cc.p(playerPosition)));
+            var getBetAction =  cc.moveTo(1.0, playerPosition);
             this.betPhotoArray[j].runAction(cc.sequence(getBetAction,cc.hide()));
         }
 		//初始化房间状态为非游戏状态

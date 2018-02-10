@@ -51,6 +51,8 @@ var room_create = function(param,callback){
 					player.push(t_player["gender"]);
 					if(g_game_type == "TDK"){
 						player.push(t_player["paiXing"]);
+					}else if(g_game_type == "ZJH"){
+						player.push(t_player["mark"]);
 					}
 					g_playerData.push(player);
 				}
@@ -112,6 +114,8 @@ var room_enter = function(param,callback){
 					player.push(t_player["gender"]);
 					if(g_game_type == "TDK"){
 						player.push(t_player["paiXing"]);
+					}else if(g_game_type == "ZJH"){
+						player.push(t_player["mark"]);
 					}
 					g_playerData.push(player);
 				}

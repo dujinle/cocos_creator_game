@@ -31,6 +31,10 @@ cc.Class({
 		},
 		
     },
+	onLoad(){
+		cc.log("load zjh player......",this.check_card);
+		
+	},
 	init(params){
 		cc.log("zjh_player init: " + JSON.stringify(params));
 		this.id = params[0];
@@ -38,6 +42,11 @@ cc.Class({
         this.is_power = params[2];
 		this.nick_name = params[3];
 		this.my_gold = params[4];
+		if(params[6] == 0){
+			this.check_card = false;
+		}else{
+			this.check_card = true;
+		}
 		this.nick_name_label.getComponent(cc.Label).string = this.nick_name;
 		this.gold_label.getComponent(cc.Label).string = this.my_gold;
 		this.init_cards();

@@ -33,9 +33,10 @@ cc.Class({
 					self.node.active = false;
 				}
 			}
-         }, this.node);
+         }, self.node);
 	},
 	set_which_select(which){
+		cc.log(JSON.stringify(which));
 		for(var i = 0;i < which.length;i++){
 			var idx = which[i] - 1;
 			this.my_selects[idx].active = true;
