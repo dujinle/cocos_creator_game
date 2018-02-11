@@ -10,7 +10,7 @@
   },
   {
     "__type__": "cc.Node",
-    "_name": "tdk_player",
+    "_name": "zhq_player",
     "_objFlags": 0,
     "_parent": null,
     "_children": [
@@ -60,8 +60,8 @@
     "_scaleY": 1,
     "_position": {
       "__type__": "cc.Vec2",
-      "x": 120,
-      "y": 150
+      "x": -520,
+      "y": -250
     },
     "_skewX": 0,
     "_skewY": 0,
@@ -281,7 +281,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "73ymJX7iFCO49bZ9F6ZRzu",
     "sync": false
@@ -332,7 +332,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "2bAqERPh5GdZgnp7yn0TpV",
     "sync": false
@@ -484,7 +484,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "05l/dFOIVKXIn64+ECBler",
     "sync": false
@@ -535,7 +535,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "84qWH3eHxCj41v0pQWxbm8",
     "sync": false
@@ -591,7 +591,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "ee63qWFoFBxZVxgWYIx5CA",
     "sync": false
@@ -752,7 +752,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "38mZLSWYxBqaHi9Yvmctw6",
     "sync": false
@@ -843,7 +843,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "74pi4xWypP8bmIJtJCxuQy",
     "sync": false
@@ -930,7 +930,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "be5XSTfzFBS4Up9sKzDGKp",
     "sync": false
@@ -1017,7 +1017,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "32jro5xXBO2YqgS1bqvDRj",
     "sync": false
@@ -1106,7 +1106,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "fb+Ix2zdBNjKUhZUFTmxKA",
     "sync": false
@@ -1143,13 +1143,13 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "b2n2ETYMpGDoYinem20B0y",
     "sync": false
   },
   {
-    "__type__": "98d9cXwuKVK24eAAT+j6zVN",
+    "__type__": "302af+nyH9LmLzyp7s7QmEp",
     "_name": "",
     "_objFlags": 0,
     "node": {
@@ -1163,9 +1163,7 @@
     "position_server": 0,
     "statusTag": null,
     "player_position": 0,
-    "check_card": false,
     "is_power": 0,
-    "abandon": false,
     "mobile_sprite": {
       "__id__": 36
     },
@@ -1181,8 +1179,8 @@
     "gold_label": {
       "__id__": 31
     },
-    "equalCard": null,
-    "my_cards": []
+    "my_cards": [],
+    "selected_cards": []
   },
   {
     "__type__": "cc.Widget",
@@ -1194,11 +1192,11 @@
     "_enabled": true,
     "isAlignOnce": true,
     "_target": null,
-    "_alignFlags": 8,
+    "_alignFlags": 12,
     "_left": 120,
     "_right": 0,
-    "_top": 650,
-    "_bottom": 0,
+    "_top": 0,
+    "_bottom": 150,
     "_verticalCenter": 0,
     "_horizontalCenter": 0,
     "_isAbsLeft": true,
@@ -1216,7 +1214,7 @@
       "__id__": 1
     },
     "asset": {
-      "__uuid__": "8c25b8cb-13a5-4ef4-9c77-7e53218ba63f"
+      "__uuid__": "67115ce7-ead6-4f78-acfc-0365d99e374b"
     },
     "fileId": "99PlKcqHVBiowsNtwistJ7",
     "sync": false

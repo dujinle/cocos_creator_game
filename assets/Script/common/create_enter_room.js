@@ -63,7 +63,7 @@ var room_create = function(param,callback){
 				g_fapaiNum = data1["fapai_num"];
 				cc.director.loadScene("TDKRoomScene");
 			}else if(g_game_type == "ZHQ"){
-				cc.director.runScene(new ZHQGameScene())
+				cc.director.loadScene("ZHQRoomScene");
 			}
 		});
 	});
@@ -126,7 +126,7 @@ var room_enter = function(param,callback){
 				g_fapaiNum = data1["fapai_num"];
 				cc.director.loadScene("TDKRoomScene");
 			}else if(g_game_type == "ZHQ"){
-				cc.director.runScene(new ZHQGameScene())
+				cc.director.loadScene("ZHQRoomScene");
 			}
         });
     });

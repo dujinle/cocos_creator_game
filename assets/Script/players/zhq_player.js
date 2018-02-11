@@ -9,20 +9,25 @@ cc.Class({
 		position_server:0,
 		statusTag:null,
 		player_position:0,
-		check_card:false,
 		is_power:0,
-		abandon:false,
 		mobile_sprite:cc.Sprite,
 		counter_timer:cc.Node,
 		status_sprite:cc.Sprite,
 		nick_name_label:cc.Label,
 		gold_label:cc.Label,
-		equalCard:null,
 		my_cards:{
 			type:cc.Node,
 			default:[]
 		},
+		selected_cards:{
+			type:cc.Node,
+			default:[]
+		}
     },
+	onLoad(){
+		var self = this;
+		self.node.on("pressed", self.switchRadio, self);
+	},
 	init(params){
 		cc.log("tdk_player init: " + JSON.stringify(params));
 		this.id = params[0];
@@ -32,7 +37,6 @@ cc.Class({
 		this.my_gold = params[4];
 		this.nick_name_label.getComponent(cc.Label).string = this.nick_name;
 		this.gold_label.getComponent(cc.Label).string = this.my_gold;
-		this.init_cards_info(params[6]);
 	},
 	start_timer(){
 		var count_timer = this.counter_timer.getComponent("count_timer");
@@ -49,34 +53,10 @@ cc.Class({
 		this.status_sprite.node.active = true;
 	},
 	
-	init_cards_info(paiXing){
-        this.my_cards = new Array();
-		if(paiXing != null && paiXing != "null"){
-			for(var i = 1;i < 6;i++){
-				var p = paiXing["p" + i];
-				var s = paiXing["s" + i];
-				console.log("p:" + p + " s:" + s);
-				if(p){
-					var card = cc.instantiate(g_assets["zjh_card"]);
-					var card_com = card.getComponent("zjh_card");
-					card_com.initCardSprite(parseInt(s),parseInt(p));
-					this.node.parent.addChild(card);
-					this.my_cards.push(card);
-				}else{
-					break;
-				}
-			}
-		}
-    },
 	addPlayerCard(){
 		var card = cc.instantiate(g_assets["zjh_card"]);
 		this.node.parent.addChild(card);
 		this.my_cards.push(card);
-	},
-	addEqualCard(){
-		this.equalCard = cc.instantiate(g_assets["zjh_card"]);
-		this.node.parent.addChild(this.equalCard);
-		return this.equalCard;
 	},
 	init_cards(card_num){
 		for(var i = 0;i < card_num;i++){
@@ -109,5 +89,22 @@ cc.Class({
 	resetMoneyLabel(money){
 		this.my_gold = money;
 		this.gold_label.string = money;
-	}
+	},
+	switchRadio(event) {
+		var card_com = event.target.getComponent("zhq_card");
+        var suit = event.target.getComponent("zhq_card").suit;
+		var rank = event.target.getComponent("zhq_card").rank;
+		cc.log("switchRadio : suit:" + suit + " rank:" + rank);
+		if(card_com.touch_tag == true){
+			this.selected_cards.push(event.target);
+		}else{
+			for(var i = 0;i < this.selected_cards.length;i++){
+				var card_t = this.selected_cards[i];
+				if(card_t == event.target){
+					this.selected_cards.splice(i,1);
+					break;
+				}
+			}
+		}
+    },
 });
