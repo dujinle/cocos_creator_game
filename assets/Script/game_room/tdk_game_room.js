@@ -133,10 +133,28 @@ cc.Class({
 				this.bipai_button.getComponent(cc.Button).interactable = true;
 			}
 		}
+		for(var i=0;i < g_players.length;i++){
+			var player = g_players[i];
+			var player_com = player.getComponent("tdk_player");
+			if(player_com.position_server == this.currentGetPowerPlayerPosition){
+				console.log("positionServer:" + player_com.position_server + player_com.check_card);
+				player_com.start_timer();
+				break;
+			}
+		}
 	},
 	initButtonEnableAfterFapaiContinue(){
 		if(g_myselfPlayerPos == this.currentGetPowerPlayerPosition){
 			this.genzhu_button.getComponent(cc.Button).interactable = true;
+		}
+		for(var i=0;i < g_players.length;i++){
+			var player = g_players[i];
+			var player_com = player.getComponent("tdk_player");
+			if(player_com.position_server == this.currentGetPowerPlayerPosition){
+				console.log("positionServer:" + player_com.position_server + player_com.check_card);
+				player_com.start_timer();
+				break;
+			}
 		}
 	},
     initPlayersAndPlayer_noPower(){
@@ -193,14 +211,22 @@ cc.Class({
     	}
     },
 	initPlayerCardsPosition(){
+		cc.log("initPlayerCardsPosition start .......");
 		var all_players = g_players.concat(g_players_noPower);
         for(var i=0;i < all_players.length;i++){
 			var player = all_players[i];
 			var player_com = player.getComponent("tdk_player");
-            if(player_com.is_power == 2){
+            if(player_com.is_power >= 1){
 				for(var m = 0;m < player_com.my_cards.length;m++){
 					var position = this.calc_player_card_position(player,m);
-					player_com.my_cards[m].setPosition(position);
+					var card = player_com.my_cards[m];
+					var card_com = card.getComponent("zjh_card");
+					card.setPosition(position);
+					if(m < g_fapaiNum - 1){
+						card_com.sprite_back.node.runAction(cc.show());
+					}else{
+						card_com.sprite.runAction(cc.show());
+					}
 				}
 			}
         }
@@ -504,7 +530,7 @@ cc.Class({
 			/*初始化玩家手中的牌（背面），权限isPower,开牌checkCard弃牌abandon,失败提示精灵loserSprite*/
 			for(var i=0;i < g_players.length;i++){
 				var player_com = g_players[i].getComponent("tdk_player");
-				player_com.init_cards();
+				player_com.init_cards(g_fapaiNum);
 				player_com.is_power = 2;
 				player_com.check_card = false;
 				player_com.abandon = false;

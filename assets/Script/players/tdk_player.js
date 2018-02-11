@@ -24,7 +24,7 @@ cc.Class({
 		},
     },
 	init(params){
-		cc.log("zjh_player init: " + JSON.stringify(params));
+		cc.log("tdk_player init: " + JSON.stringify(params));
 		this.id = params[0];
         this.position_server = params[1];
         this.is_power = params[2];
@@ -32,7 +32,7 @@ cc.Class({
 		this.my_gold = params[4];
 		this.nick_name_label.getComponent(cc.Label).string = this.nick_name;
 		this.gold_label.getComponent(cc.Label).string = this.my_gold;
-		this.init_cards_info(g_fapaiNum,params[6]);
+		this.init_cards_info(params[6]);
 	},
 	start_timer(){
 		var count_timer = this.counter_timer.getComponent("count_timer");
@@ -47,15 +47,10 @@ cc.Class({
 		this.status_sprite.spriteFrame = g_assets[status];
 		this.status_sprite.node.active = true;
 	},
-	init_cards_info(card_num,paiXing){
+	
+	init_cards_info(paiXing){
         this.my_cards = new Array();
-		if(paiXing == null || paiXing == "null"){
-			for(var i = 0;i< card_num;i++){
-				var card = cc.instantiate(g_assets["zjh_card"]);
-				this.node.parent.addChild(card);
-				this.my_cards.push(card);
-			}
-		}else{
+		if(paiXing != null && paiXing != "null"){
 			for(var i = 1;i < 6;i++){
 				var p = paiXing["p" + i];
 				var s = paiXing["s" + i];
@@ -82,8 +77,8 @@ cc.Class({
 		this.node.parent.addChild(this.equalCard);
 		return this.equalCard;
 	},
-	init_cards(){
-		for(var i = 0;i < 3;i++){
+	init_cards(card_num){
+		for(var i = 0;i < card_num;i++){
 			var card = cc.instantiate(g_assets["zjh_card"]);
 			this.node.parent.addChild(card);
 			this.my_cards.push(card);
