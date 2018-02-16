@@ -27,6 +27,7 @@ cc.Class({
 	onLoad(){
 		var self = this;
 		self.node.on("pressed", self.switchRadio, self);
+		//self.start_timer();
 	},
 	init(params){
 		cc.log("tdk_player init: " + JSON.stringify(params));
@@ -37,6 +38,9 @@ cc.Class({
 		this.my_gold = params[4];
 		this.nick_name_label.getComponent(cc.Label).string = this.nick_name;
 		this.gold_label.getComponent(cc.Label).string = this.my_gold;
+		if(this.is_power > 0){
+			this.setSpriteStatus("start");
+		}
 	},
 	start_timer(){
 		var count_timer = this.counter_timer.getComponent("count_timer");
@@ -54,19 +58,20 @@ cc.Class({
 	},
 	
 	addPlayerCard(){
-		var card = cc.instantiate(g_assets["zjh_card"]);
+		var card = cc.instantiate(g_assets["zhq_card"]);
 		this.node.parent.addChild(card);
 		this.my_cards.push(card);
+		return card;
 	},
 	init_cards(card_num){
 		for(var i = 0;i < card_num;i++){
-			var card = cc.instantiate(g_assets["zjh_card"]);
+			var card = cc.instantiate(g_assets["zhq_card"]);
 			this.node.parent.addChild(card);
 			this.my_cards.push(card);
 		}
     },
 	set_card_sprite(idx,suit,rank){
-		var card = this.my_cards[idx].getComponent("zjh_card");
+		var card = this.my_cards[idx].getComponent("zhq_card");
 		card.initCardSprite(suit,rank);
 	},
 	get_last_card(){
@@ -76,12 +81,41 @@ cc.Class({
 		}
 		return last_card;
 	},
+	getNextEmptyCard(){
+		for(var j = 0;j < this.myCards.length;j++){
+			if(this.myCards[j].suit != null){
+				continue;
+			}
+			return j;
+		}
+		return -1;
+	},
 	remove_cards(){
 		for(var i = 0;i < this.my_cards.length;i++){
 			var card = this.my_cards[i];
 			card.destroy();
 		}
 		this.my_cards.splice(0,this.my_cards.length);
+	},
+	remove_select_cards(){
+		for(var i = 0;i < this.selected_cards.length;i++){
+			var selectCard = this.selected_cards[i];
+			for(var j = 0;j < this.my_cards.length;j++){
+				if(selectCard == this.my_cards[j]){
+					this.my_cards.splice(j,1);
+					break;
+				}
+			}
+		}
+		this.selected_cards.splice(0,this.selected_cards.length);
+	},
+	resetSelectCard(){
+		for(var i = 0;i < this.selected_cards.length;i++){
+			var card_t = this.selected_cards[i];
+			var card_com = card_t.getComponent("zhq_card");
+			card_com.menuCallbackButton();
+		}
+		this.selected_cards.splice(0,this.selected_cards.length);
 	},
 	hide_status_sprite(){
 		this.status_sprite.node.active = false;

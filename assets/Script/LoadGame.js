@@ -69,7 +69,7 @@ cc.Class({
         cc.director.loadScene("MainScene");
     },
     onLoad () {
-		this.source_leng = 83;
+		this.source_leng = 85;
 		this.load_res();
         this.schedule(this.load_update,0.5);
     },
@@ -98,17 +98,5 @@ cc.Class({
 				cc.log("load res :" + assets[i].name);
 			}
 		});
-		/*
-		cc.loader.loadRes("prefab/zjh_player", function (err, prefab) {
-			g_assets[prefab.name] = prefab;
-			self.rate = self.rate + 1;
-			cc.log("load res :" + prefab.name);
-		});
-		cc.loader.loadRes("prefab/zjh_card", function (err, prefab) {
-			g_assets[prefab.name] = prefab;
-			self.rate = self.rate + 1;
-			cc.log("load res :" + prefab.name);
-		});
-		*/
 	}
 });
