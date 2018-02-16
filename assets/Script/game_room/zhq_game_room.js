@@ -228,7 +228,8 @@ cc.Class({
 		var playerPosition = -1;
 		for(var i = 0;i < g_players.length;i++){
 			var player = g_players[i];
-			if(player.positionServer == g_myselfPlayerPos){
+			var player_com = player.getComponent("zhq_player");
+			if(player_com.position_server == g_myselfPlayerPos){
 				playerPosition = i;
 				break;
 			}
@@ -270,7 +271,8 @@ cc.Class({
 		var playerPosition = -1;
 		for(var i = 0;i < g_players.length;i++){
 			var player = g_players[i];
-			if(player.positionServer == g_myselfPlayerPos){
+			var player_com = player.getComponent("zhq_player");
+			if(player_com.position_server == g_myselfPlayerPos){
 				playerPosition = i;
 				break;
 			}
@@ -433,7 +435,7 @@ cc.Class({
 		//确定新加入玩家的客户端位置
 		var idx = 0;
 		if(t_player[1] > g_myselfPlayerPos){
-			idx = t_player[1] - 1;
+			idx = t_player[1] - g_myselfPlayerPos;
 		}else{
 			idx = this.players.length - g_myselfPlayerPos + t_player[1];
 		}
@@ -796,14 +798,15 @@ cc.Class({
 			for(var i = 0;i < loster.length;i++){
 				var loserLocal = loster[i];
 				var winLocal = winners[i];
-				var loserPlayer = winnerPlayer = null;
+				var loserPlayer = null;
+				var winnerPlayer = null;
 				for(var j=0;j<g_players.length;j++){
 					var player = g_players[j];
 					var player_com = player.getComponent("zhq_player");
 					if(player_com.position_server == loserLocal){
 						loserPlayer = player;
 						player_com.setSpriteStatus("loser");
-						player_com.resetMoneyLabel(player_com.myGold - this.bet);
+						player_com.resetMoneyLabel(player_com.my_gold - this.bet);
 						break;
 					}
 				}
@@ -813,7 +816,7 @@ cc.Class({
 					if(player_com.position_server == winLocal){
 						winnerPlayer = player;
 						player_com.setSpriteStatus("win");
-						player_com.resetMoneyLabel(player.myGold + this.bet);
+						player_com.resetMoneyLabel(player_com.my_gold + this.bet);
 						break;
 					}
 				}
@@ -980,12 +983,14 @@ cc.Class({
 		var player_com = player.getComponent("zhq_player");
 		var card_len = player_com.my_cards.length;
 		var card = player_com.addPlayerCard();
+		var card_com = card.getComponent("zhq_card");
 		var position = this.calc_player_card_position(player,card_len);
 		player_com.set_card_sprite(card_len,parseInt(this.myselfCards[card_len][0]),
 			parseInt(this.myselfCards[card_len][1]));
 		card.setPosition(position);
     	var callFunc = cc.callFunc(this.actionFaPai,this);
-    	player_com.my_cards[card_len].runAction(cc.sequence(cc.delayTime(0.45),cc.show(),callFunc));
+    	//card.runAction(cc.sequence(cc.delayTime(0.45),cc.show(),callFunc));
+		card_com.sprite.runAction(cc.sequence(cc.delayTime(0.45),cc.show(),callFunc));
     },
 	actionBottomBet(loserPlayerPosition,winPlayerPosition){
        var size = cc.director.getWinSize();
@@ -1006,7 +1011,7 @@ cc.Class({
 			   this.betPhotoArray.push(chip);
 			   chip.setPosition(loserPlayerPosition);
 			   var moveBet = cc.moveTo(0.3,winPlayerPosition);
-			   chip.runAction(moveBet);
+			   chip.runAction(cc.sequence(cc.delayTime(0.45),moveBet,cc.hide()));
 			   betNum = betNum - 1;
 		   }
        }else{
@@ -1015,7 +1020,7 @@ cc.Class({
 		   this.betPhotoArray.push(chip);
 		   chip.setPosition(loserPlayerPosition);
 		   var moveBet=cc.moveTo(0.3,winPlayerPosition);
-		   chip.runAction(moveBet);
+		   chip.runAction(cc.sequence(cc.delayTime(0.45),moveBet,cc.hide()));
 	   }
 	},
 	calc_player_card_position(player,m){

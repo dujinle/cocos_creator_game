@@ -440,7 +440,7 @@ cc.Class({
 		//确定新加入玩家的客户端位置
 		var idx = 0;
 		if(t_player[1] > g_myselfPlayerPos){
-			idx = t_player[1] - 1;
+			idx = t_player[1] - g_myselfPlayerPos;
 		}else{
 			idx = this.players.length - g_myselfPlayerPos + t_player[1];
 		}
