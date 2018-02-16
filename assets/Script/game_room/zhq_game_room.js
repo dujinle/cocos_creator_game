@@ -59,6 +59,7 @@ cc.Class({
 		this.initButtonEnableAfterComeInRoom();
 		this.initPlayersAndPlayer_noPower();
 		this.schedule(this.showRoomMessageUpdate,1.0/60,cc.REPEAT_FOREVER,0);
+		this.node.on("pressed", this.switchRadio, this);
 	},
 	start(){
 		cc.log("go into zhq game room scene start");
@@ -376,7 +377,7 @@ cc.Class({
 		pomelo.on('onStart',this.onStart_function.bind(this));
     	pomelo.on('onReady',this.onReady_function.bind(this));
 		pomelo.on('onAdd',this.onAdd_function.bind(this));
-		pomelo.on('onFapai',this.onFapai_function.bind(this));
+		pomelo.on('onFaPai',this.onFapai_function.bind(this));
 		pomelo.on('onShoupai',this.onShoupai_function.bind(this));
 		pomelo.on('onShoupaiFirst',this.onShoupaiFirst_function.bind(this));
 		pomelo.on('onPass',this.onPass_function.bind(this));
@@ -493,14 +494,12 @@ cc.Class({
 				player_com.remove_cards();
 			}
 			this.bet = g_betArray[0];
-			this.sumBet = data["all_chip"];
+			this.fapai_count = 0;
 
 			/*初始化玩家手中的牌（背面），权限isPower,开牌checkCard弃牌abandon,失败提示精灵loserSprite*/
 			for(var i=0;i < g_players.length;i++){
 				var player_com = g_players[i].getComponent("zhq_player");
-				player_com.init_cards();
 				player_com.is_power = 2;
-				player_com.check_card = false;
 				player_com.abandon = false;
 				player_com.hide_status_sprite();
 			}
@@ -508,8 +507,6 @@ cc.Class({
 			for(var i=0;i < g_players.length;i++){
 				var player = g_players[i];
 				var player_com = player.getComponent("zhq_player");
-				this.actionBottomBet(player.getPosition());
-				player_com.resetMoneyLabel(player_com.my_gold - this.bet);
 				if(player_com.position_server == this.currentGetPowerPlayerPosition){
 					player_com.setSpriteStatus("shou");
 				}
@@ -693,7 +690,6 @@ cc.Class({
 	},
 	onMarkA_function(data){
 		console.log("onMarkA:" + JSON.stringify(data));
-		this.liangAMenuItem.setEnabled(false);
 		var markPai = data["mark"];
 		var locationServer = data["location"];
 		var heiAs = data["heia"];
@@ -748,7 +744,7 @@ cc.Class({
 					}
 				}
 			}
-			player.resetSelectCard();
+			player_com.resetSelectCard();
 		}
 		this.touxiang_button.getComponent(cc.Button).interactable = true;
 	},
@@ -872,7 +868,7 @@ cc.Class({
 		if(player_com.position_server != g_myselfPlayerPos){
 			//设置红桃四的玩家状态
 			var flag = false;
-			var lastId = player.getNextEmptyCard();
+			var lastId = player_com.getNextEmptyCard();
 			for(var i = 0;i < lastId;i++){
 				var card = player_com.my_cards[i];
 				var card_com = card.getComponent("zhq_card");
@@ -956,7 +952,34 @@ cc.Class({
 		msage_scroll_com.set_string(data);
 	},
 	
-	
+	switchRadio(event) {
+		var card_com = event.target.getComponent("zhq_card");
+        var suit = event.target.getComponent("zhq_card").suit;
+		var rank = event.target.getComponent("zhq_card").rank;
+		cc.log("switchRadio : suit:" + suit + " rank:" + rank);
+		var player_com = null;
+		for(var i = 0;i < g_players.length;i++){
+			var player = g_players[i];
+			var player_com = player.getComponent("zhq_player");
+    		if(player_com.position_server == g_myselfPlayerPos){
+    			break;
+    		}
+    	}
+		if(player_com == null){
+			return false;
+		}
+		if(card_com.touch_tag == true){
+			player_com.selected_cards.push(event.target);
+		}else{
+			for(var i = 0;i < player_com.selected_cards.length;i++){
+				var card_t = player_com.selected_cards[i];
+				if(card_t == event.target){
+					player_com.selected_cards.splice(i,1);
+					break;
+				}
+			}
+		}
+    },
 	actionFaPai(){
 		cc.log("fapai :" + this.fapai_count);
     	var size = cc.director.getWinSize();
@@ -1059,7 +1082,7 @@ cc.Class({
 		pomelo.removeListener('onStart');
         pomelo.removeListener('onReady');
 		pomelo.removeListener('onAdd');
-		pomelo.removeListener('onFapai');
+		pomelo.removeListener('onFaPai');
         pomelo.removeListener('onShoupai');
         pomelo.removeListener('onShoupaiFirst');
         pomelo.removeListener('onPass');

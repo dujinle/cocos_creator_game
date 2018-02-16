@@ -24,11 +24,6 @@ cc.Class({
 			default:[]
 		}
     },
-	onLoad(){
-		var self = this;
-		self.node.on("pressed", self.switchRadio, self);
-		//self.start_timer();
-	},
 	init(params){
 		cc.log("tdk_player init: " + JSON.stringify(params));
 		this.id = params[0];
@@ -82,8 +77,8 @@ cc.Class({
 		return last_card;
 	},
 	getNextEmptyCard(){
-		for(var j = 0;j < this.myCards.length;j++){
-			if(this.myCards[j].suit != null){
+		for(var j = 0;j < this.my_cards.length;j++){
+			if(this.my_cards[j].suit != null){
 				continue;
 			}
 			return j;
@@ -124,21 +119,4 @@ cc.Class({
 		this.my_gold = money;
 		this.gold_label.string = money;
 	},
-	switchRadio(event) {
-		var card_com = event.target.getComponent("zhq_card");
-        var suit = event.target.getComponent("zhq_card").suit;
-		var rank = event.target.getComponent("zhq_card").rank;
-		cc.log("switchRadio : suit:" + suit + " rank:" + rank);
-		if(card_com.touch_tag == true){
-			this.selected_cards.push(event.target);
-		}else{
-			for(var i = 0;i < this.selected_cards.length;i++){
-				var card_t = this.selected_cards[i];
-				if(card_t == event.target){
-					this.selected_cards.splice(i,1);
-					break;
-				}
-			}
-		}
-    },
 });
