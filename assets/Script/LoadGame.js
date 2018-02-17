@@ -69,7 +69,7 @@ cc.Class({
         cc.director.loadScene("MainScene");
     },
     onLoad () {
-		this.source_leng = 85;
+		this.source_leng = 92;
 		this.load_res();
         this.schedule(this.load_update,0.5);
     },
@@ -77,7 +77,7 @@ cc.Class({
 		this.loadBar.progress = this.rate/this.source_leng * 100;
 		this.precent.string = this.loadBar.progress + "%";
 		cc.log("this.rate:" + this.rate);
-		if(this.rate == this.source_leng){
+		if(this.rate >= this.source_leng){
 			this.unschedule(this.load_update);
 			this.loadUserInfo();
 		}

@@ -25,7 +25,6 @@ cc.Class({
 		cc.log("zjh_card  onload......");
 		var self = this;
 		var size = cc.director.getVisibleSize();
-		//self.node.setPosition(cc.p(size.width/2,size.height + g_dealCardBack.getContentSize().height/2));
 		self.node.on("touchstart", function (event) {
 			self.menuCallbackButton();
             self.node.dispatchEvent(new cc.Event.EventCustom("pressed", true));

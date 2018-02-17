@@ -8,7 +8,6 @@ var room_create = function(param,callback){
 		cc.log(JSON.stringify(data));
 		if(data.error){
 			callback(data.error);
-			cc.log(data.error);
 			return ;
 		}
 		cc.log("create room succ");
@@ -73,7 +72,6 @@ var room_enter = function(param,callback){
     pomelo.request(util.getEnterRoute(), param, function(data) {
         if(data.error) {
 			callback(data.error);
-			cc.log(data.error);
 			return ;
         }
 		pomelo.request(util.getGameRoute(),{

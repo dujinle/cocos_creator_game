@@ -116,17 +116,15 @@ cc.Class({
 		this.liangA_button.getComponent(cc.Button).interactable = false;
     },
 	initButtonEnableChuPai(){
-		if(this.currentGetPowerPlayerPosition == g_myselfPlayerPos){
-			this.chupai_button.getComponent(cc.Button).interactable = true;
-			this.buchupai_button.getComponent(cc.Button).interactable = true;
-		}else{
-			this.chupai_button.getComponent(cc.Button).interactable = false;
-			this.buchupai_button.getComponent(cc.Button).interactable = false;
-		}
 		this.start_button.getComponent(cc.Button).interactable = false;
 		this.zhunbei_button.getComponent(cc.Button).interactable = false;
 		this.touxiang_button.getComponent(cc.Button).interactable = false;
 		this.liangA_button.getComponent(cc.Button).interactable = false;
+		this.chupai_button.getComponent(cc.Button).interactable = false;
+		this.buchupai_button.getComponent(cc.Button).interactable = false;
+		if(this.currentGetPowerPlayerPosition == g_myselfPlayerPos){
+			this.chupai_button.getComponent(cc.Button).interactable = true;
+		}
 	},
     initPlayersAndPlayer_noPower(){
 		cc.log("initPlayersAndPlayer_noPower" + JSON.stringify(g_playerData));
@@ -255,7 +253,7 @@ cc.Class({
 				console.log(data.msg);
 			});
 		}else{
-			util.showError(this,"请选择要出的牌");
+			this.show_error_info("请选择要出的牌");
 		}
 	},
 	callback_buchupai(){
@@ -289,7 +287,7 @@ cc.Class({
 				mark["p"] = [card_com.rank];
 				mark["s"] = [card_com.suit];
 			}else{
-				//util.showError(this,"请选择一张黑A 或者3张相同大小的牌");
+				this.show_error_info("请选择一张黑A 或者3张相同大小的牌");
 				return false;
 			}
 		}else if(selectCards.length == 3){
@@ -298,7 +296,7 @@ cc.Class({
 			for(var j = 1;j < selectCards.length;j++){
 				var card_com = selectCards[j].getComponent("zhq_card");
 				if(card_com.rank != pref){
-					util.showError(this,"请选择一张黑A 或者3张相同大小的牌");
+					this.show_error_info("请选择一张黑A 或者3张相同大小的牌");
 					pref = -1;
 					return false;
 				}
@@ -322,7 +320,7 @@ cc.Class({
 			mark["p"] = [card_com.rank,card_com_1.rank];
 			mark["s"] = [card_com.suit,card_com_1.suit];
 		}else{
-			//util.showError(this,"请选择一张黑A 或者3张相同大小的牌");
+			this.show_error_info("请选择一张黑A 或者3张相同大小的牌");
 			return false;
 		}
 		pomelo.request(util.getGameRoute(),{
@@ -412,7 +410,7 @@ cc.Class({
 			var player = g_players[i];
 			var player_com = player.getComponent("zhq_player");
 			if(player_com.position_server == data.location){
-				player_com.is_power = 2;
+				player_com.is_power = 3;
 				player_com.setSpriteStatus("yizhunbei");
 				//准备状态表示
 				break;
@@ -482,11 +480,11 @@ cc.Class({
 			this.startDealCardPosition = data["location"];
 			
 			//更新房间状态
-			this.roomState=1;
+			this.roomState = 1;
 			for(var i = 0;i < this.betPhotoArray.length;i++){
 				this.betPhotoArray[i].removeFromParent();
 			}
-			this.betPhotoArray.length=0;
+			this.betPhotoArray.length = 0;
 			//更新玩家信息
 			for(var i=0;i<g_players.length;i++){
 				//清除玩家手中上一局的牌，
@@ -577,7 +575,7 @@ cc.Class({
 			var player = g_players[i];
 			var player_com = player.getComponent("zhq_player");
 			if(player_com.position_server == data.location){
-				player_com.setSpriteStatus("pass");
+				player_com.setSpriteStatus("buchupai");
 				break;
 			}
 		}
@@ -626,7 +624,7 @@ cc.Class({
 		this.lastPosition = locationServer;
 		var player = g_players[playerIndexOf];
 		var player_com = player.getComponent("zhq_player");
-		var size = cc.director.getWinSize();
+		var size = cc.director.getVisibleSize();
 		//其他玩家出牌动作
 		if(locationServer != g_myselfPlayerPos){
 			//出牌放在桌面中间显示
@@ -640,7 +638,8 @@ cc.Class({
 				var position = this.calc_player_card_position(player,player_com.my_cards.length - 1);
 				card.setPosition(position);
 				card_com.initCardSprite(suit,rank);
-				var moveToBiPaiPosition=cc.moveTo(0.5,cc.p(size.width/2-(80*(i)),size.height/2));
+				var moveToPos = this.node.convertToNodeSpaceAR(cc.p(size.width/2-(80*(i)),size.height/2));
+				var moveToBiPaiPosition = cc.moveTo(0.5,moveToPos);
 				card_com.sprite.runAction(cc.show());
 				card.runAction(moveToBiPaiPosition);
 				this.lastPai.push(card);
@@ -651,12 +650,13 @@ cc.Class({
 			for(var i = 0;i < player_com.selected_cards.length;i++){
 				var card = player_com.selected_cards[i];
 				//移动到桌面位置
-				var moveToBiPaiPosition=cc.moveTo(0.5,cc.p(size.width/2-(80*(i)),size.height/2));
+				var moveToPos = this.node.convertToNodeSpaceAR(cc.p(size.width/2-(80*(i)),size.height/2));
+				var moveToBiPaiPosition = cc.moveTo(0.5,moveToPos);
 				card.runAction(moveToBiPaiPosition);
 				this.lastPai.push(card);
 			}
 			//重新排列牌
-			player_com.removeSelectCards();
+			player_com.remove_select_cards();
 			this.setPlayerCardsPosition(player,player_com.my_cards.length);
 		}
 		//出玩牌了
@@ -676,8 +676,8 @@ cc.Class({
 		for(var i = 0;i < g_players.length;i++){
 			var player = g_players[i];
 			var player_com = player.getComponent("zhq_player");
-			if(player_com.position_server == g_myselfPlayerPos){
-				if(player_com.position_server == locationServer){
+			if(player_com.position_server == g_myselfPlayerPos && g_myselfPlayerPos == this.currentGetPowerPlayerPosition){
+				if(player_com.position_server == locationServer && player_com.is_power == 4){
 					if(flag == true){
 						this.chupai_button.getComponent(cc.Button).interactable = true;
 					}else{
@@ -702,7 +702,6 @@ cc.Class({
 				var player_com = player.getComponent("zhq_player");
 				if(player_com.position_server == heiLocation && heiLocation != g_myselfPlayerPos){
 					var lastId = player_com.getNextEmptyCard();
-					//var position = this.calc_player_card_position(player,lastId);
 					var card = player_com.my_cards[lastId];
 					var card_com = card.getComponent("zhq_card");
 					if(i == 0){
@@ -725,8 +724,8 @@ cc.Class({
 		for(var j = 0;j < g_players.length;j++){
 			var player = g_players[j];
 			var player_com = player.getComponent("zhq_player");
-			if(player_com.position_server == locationServer && locationServer != g_myselfPlayerPos){
-				if(markPai["p"].length >= 3){
+			if(player_com.position_server == locationServer){
+				if(markPai["p"].length >= 3 && locationServer != g_myselfPlayerPos){
 					for(var i = 0;i < markPai["p"].length;i++){
 						var lastId = player_com.getNextEmptyCard();
 						player_com.set_card_sprite(lastId,parseInt(markPai["s"][i]),parseInt(markPai["p"][i]));
@@ -743,24 +742,25 @@ cc.Class({
 						card_com.sprite.runAction(frontSpawn);
 					}
 				}
+				player_com.resetSelectCard();
 			}
-			player_com.resetSelectCard();
+			
 		}
 		this.touxiang_button.getComponent(cc.Button).interactable = true;
 	},
 	onThrow_function(data){
 		cc.log("onThrow:" + JSON.stringify(data));
 		var playerPosServer = data["location"];
-		var playerPosServers = data["user"];
+		var playerPosServers = data["users"];
 		var flag = data["status"];
 		for(var i = 0;i < g_players.length;i++){
 			var player = g_players[i];
 			var player_com = player.getComponent("zhq_player");
 			if(player_com.position_server == playerPosServer){
 				if(flag == true){
-					player_com.setSpriteStatus("throw");
+					player_com.setSpriteStatus("touxiang");
 				}else if(flag == false){
-					player_com.setSpriteStatus("nothrow");
+					player_com.setSpriteStatus("butouxing");
 				}
 				break;
 			}
@@ -811,7 +811,7 @@ cc.Class({
 					var player_com = player.getComponent("zhq_player");
 					if(player_com.position_server == winLocal){
 						winnerPlayer = player;
-						player_com.setSpriteStatus("win");
+						player_com.setSpriteStatus("winner");
 						player_com.resetMoneyLabel(player_com.my_gold + this.bet);
 						break;
 					}
@@ -856,7 +856,7 @@ cc.Class({
 				rotationPlayerIndexOf = i;
 				player_com.start_timer();
 			}
-			player_com.is_power = 3;
+			player_com.is_power = 4;
 			player_com.hide_status_sprite();
 		}
 		if (rotationPlayerIndexOf == -1) {
@@ -891,7 +891,7 @@ cc.Class({
 				card_com.sprite.runAction(frontSpawn);
 			}
 		}
-		player_com.setSpriteStatus("chu");
+		player_com.setSpriteStatus("chupai");
 		this.initButtonEnableChuPai();
 	},	
 	onLeave_function(data){
@@ -919,10 +919,6 @@ cc.Class({
 			var player_com = g_players[i].getComponent("zhq_player");
 			if(player_com.position_server == this.currentGetPowerPlayerPosition){
 				player_com.stop_timer();
-				if(this.currentGetPowerPlayerPosition == g_myselfPlayerPos){
-					this.chupai_button.getComponent(cc.Button).interactable = false;
-					this.buchupai_button.getComponent(cc.Button).interactable = false;
-				}
 				break;
 			}
 		}
@@ -931,6 +927,7 @@ cc.Class({
 			this.currentGetPowerPlayerPosition = rotationPlayerPositionServer;
 			if (rotationPlayerPositionServer == g_myselfPlayerPos) {
 				this.chupai_button.getComponent(cc.Button).interactable = true;
+				this.buchupai_button.getComponent(cc.Button).interactable = true;
 				if(this.lastPosition == this.currentGetPowerPlayerPosition){
 					this.buchupai_button.getComponent(cc.Button).interactable = false;
 				}
@@ -939,13 +936,13 @@ cc.Class({
 				var player_com = g_players[i].getComponent("zhq_player");
 				if (player_com.position_server == rotationPlayerPositionServer) {
 					player_com.start_timer();
-					player_com.setSpriteStatus("chu");
-				}else{
+					player_com.setSpriteStatus("chupai");
+				}else if(player_com.statusTag == "chupai"){
 					player_com.hide_status_sprite();
 				}
 			}
 		}
-	},	
+	},
 	onUserBroadcast_function(data){
 		cc.log("onUserBroadcast:"+JSON.stringify(data));
 		var msage_scroll_com = this.msage_scroll.getComponent("msage_scroll");
@@ -978,6 +975,22 @@ cc.Class({
 					break;
 				}
 			}
+		}
+		var selectCards = player_com.selected_cards;
+		if(selectCards.length > 0){
+			var mark = {"p":[],"s":[]};
+			for(var i = 0;i < selectCards.length;i++){
+				var card_com = selectCards[i].getComponent("zhq_card");
+				mark["p"].push(card_com.rank);
+				mark["s"].push(card_com.suit);
+			}
+			pomelo.request(util.getGameRoute(),{
+				process:"chutip",
+				chupai:mark,
+				location:g_myselfPlayerPos
+			},function(data){
+				console.log(data.msg);
+			});
 		}
     },
 	actionFaPai(){
@@ -1076,6 +1089,14 @@ cc.Class({
 			var card = player_com.my_cards[m];
 			card.setPosition(position);
 		}
+	},
+	show_error_info(message){
+		var size = cc.director.getVisibleSize();
+		var error_tip = cc.instantiate(g_assets["prop_error_scene"]);
+		var error_tip_com = error_tip.getComponent("prop_error_info");
+		error_tip_com.show_error_info(msg);
+		this.node.addChild(error_tip);
+		error_tip.setPosition(this.node.convertToNodeSpace(size.width/2,size.height/2));
 	},
 	pomelo_removeListener(){
 		cc.log("remove listener");

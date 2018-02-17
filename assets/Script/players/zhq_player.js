@@ -78,10 +78,11 @@ cc.Class({
 	},
 	getNextEmptyCard(){
 		for(var j = 0;j < this.my_cards.length;j++){
-			if(this.my_cards[j].suit != null){
-				continue;
+			var card = this.my_cards[j];
+			var card_com = card.getComponent("zhq_card");
+			if(card_com.sprite == null){
+				return j;
 			}
-			return j;
 		}
 		return -1;
 	},

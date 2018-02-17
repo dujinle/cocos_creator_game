@@ -91,9 +91,15 @@ cc.Class({
 			roomNum: roomNum,
 			roomType: g_game_type
 		};
+		var self = this;
+		var size = cc.director.getVisibleSize();
 		room_enter(param,function(msg){
+			var error_tip = cc.instantiate(g_assets["prop_error_scene"]);
+			var error_tip_com = error_tip.getComponent("prop_error_info");
+			error_tip_com.show_error_info(msg);
+			self.node.addChild(error_tip);
+			error_tip.setPosition(self.node.convertToNodeSpace(size.width/2,size.height/2));
 			cc.log(msg);
 		});
 	},
-    // update (dt) {},
 });
