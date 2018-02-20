@@ -59,6 +59,12 @@ cc.Class({
 		this.pop_enter_game_layer.active = true;
 		cc.log("go into popEnterGameLayer......");
 	},
+	store_scene(){
+		cc.director.loadScene("StoreScene");
+	},
+	feed_back_scene(){
+		cc.director.loadScene("FeedBack");
+	},
 	exit(){
 		cc.director.end();
 	},

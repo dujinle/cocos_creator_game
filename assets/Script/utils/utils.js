@@ -68,17 +68,10 @@ util.getEnterRoute = function(){
 		return "connector.ZHQEntryHandler.enter";
 	}
 }
-util.showError = function(pparent,msg){
-	size = cc.director.getWinSize();
-	var errorTipSprite = new cc.Sprite(res.errorTip_png);
-	errorTipSprite.setPosition(size.width/2,size.height/2);
-
-	var errorLable = new cc.LabelTTF(msg, "Arial", 24);
-	errorLable.setFontFillColor(cc.color.WHITE);
-	errorLable.setPosition(errorTipSprite.getContentSize().width/2,
-		errorTipSprite.getContentSize().height/2 - 5);
-	errorTipSprite.addChild(errorLable);
-	pparent.addChild(errorTipSprite);
-	errorLable.runAction(cc.sequence(cc.fadeOut(3)));
-	errorTipSprite.runAction(cc.sequence(cc.fadeOut(3.1)));
+util.show_error_info = function(pp,size,msg){
+	var error_tip = cc.instantiate(g_assets["prop_error_scene"]);
+	var error_tip_com = error_tip.getComponent("prop_error_info");
+	error_tip_com.show_error_info(msg);
+	pp.node.addChild(error_tip);
+	error_tip.setPosition(pp.node.convertToNodeSpace(size.width/2,size.height/2));
 }
