@@ -17,7 +17,7 @@ cc.Class({
 		var self = this;
 		self.dizhu = 100;
 		self.shangxian = 300;
-		self.jushu = 5;
+		self.jushu = 20;
 		self.fangka = 1;
 		self.node.on("pressed", self.switchRadio, self);
 		var bg_sprite =  self.node.getChildByName("bg_sprite");
