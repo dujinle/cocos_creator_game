@@ -50,6 +50,9 @@ cc.Class({
 		this.nick_name_label.getComponent(cc.Label).string = this.nick_name;
 		this.gold_label.getComponent(cc.Label).string = this.my_gold;
 		this.init_cards();
+		if(this.is_power > 0){
+			this.setSpriteStatus("yizhunbei");
+		}
 	},
 	start_timer(){
 		var count_timer = this.counter_timer.getComponent("count_timer");
