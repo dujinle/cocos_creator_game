@@ -69,7 +69,7 @@ cc.Class({
         cc.director.loadScene("MainScene");
     },
     onLoad () {
-		this.source_leng = 92;
+		this.source_leng = 96;
 		this.load_res();
         this.schedule(this.load_update,0.5);
     },

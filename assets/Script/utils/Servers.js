@@ -1,9 +1,9 @@
 
-//var gateHost       = "36.110.26.26";
-//var loginHost      = "36.110.26.26";
+//var gateHost       = "192.168.2.100";
+//var loginHost      = "192.168.2.100";
 
-var gateHost       = "192.168.10.203";
-var loginHost      = "192.168.10.203";
+var gateHost       = "enjoypuke.top";
+var loginHost      = "enjoypuke.top";
 
 //var loginHost      = "120.24.254.91";
 //var loginHost       = "127.0.0.1";

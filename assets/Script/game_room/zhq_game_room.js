@@ -375,6 +375,7 @@ cc.Class({
 		pomelo.on('onStart',this.onStart_function.bind(this));
     	pomelo.on('onReady',this.onReady_function.bind(this));
 		pomelo.on('onAdd',this.onAdd_function.bind(this));
+		pomelo.on('onNoRound',this.onNoRound_function.bind(this));
 		pomelo.on('onFaPai',this.onFapai_function.bind(this));
 		pomelo.on('onShoupai',this.onShoupai_function.bind(this));
 		pomelo.on('onShoupaiFirst',this.onShoupaiFirst_function.bind(this));
@@ -948,6 +949,22 @@ cc.Class({
 		var msage_scroll_com = this.msage_scroll.getComponent("msage_scroll");
 		msage_scroll_com.set_string(data);
 	},
+	onNoRound_function(data){
+		console.log("onNoRound:"+JSON.stringify(data));
+		var size = cc.director.getVisibleSize();
+		var golds_info = data["golds"];
+		var tplayers = new Array();
+		for(var key in golds_info){
+			tplayers.push(golds_info[key]);
+		}
+		var pop_game_finish = cc.instantiate(g_assets["pop_game_finish"]);
+		var pop_game_finish_com = pop_game_finish.getComponent("pop_game_finish");
+		pop_game_finish_com.init_info(tplayers);
+		var x = size.width/2;
+		var y = size.height/2;
+		this.node.addChild(pop_game_finish);
+		pop_game_finish.setPosition(this.node.convertToNodeSpaceAR(cc.p(x,y)));
+	},
 	
 	switchRadio(event) {
 		var card_com = event.target.getComponent("zhq_card");
@@ -1103,6 +1120,7 @@ cc.Class({
 		pomelo.removeListener('onStart');
         pomelo.removeListener('onReady');
 		pomelo.removeListener('onAdd');
+		pomelo.removeListener('onNoRound');
 		pomelo.removeListener('onFaPai');
         pomelo.removeListener('onShoupai');
         pomelo.removeListener('onShoupaiFirst');
