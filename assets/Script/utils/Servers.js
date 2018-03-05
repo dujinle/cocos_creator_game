@@ -1,9 +1,9 @@
 
-//var gateHost       = "192.168.2.100";
-//var loginHost      = "192.168.2.100";
+var gateHost       = "192.168.10.130";
+var loginHost      = "192.168.10.130";
 
-var gateHost       = "enjoypuke.top";
-var loginHost      = "enjoypuke.top";
+//var gateHost       = "187j615c32.iok.la";
+//var loginHost      = "187j615c32.iok.la";
 
 //var loginHost      = "120.24.254.91";
 //var loginHost       = "127.0.0.1";
@@ -22,6 +22,7 @@ var entryRouter    = "connector.entryHandler.entry";
 var loginPort      = "8210";
 var loginRouter    = "login.loginHandler.login"; //用户登录
 var registerRouter = "login.loginHandler.register"; //注册新用户
+var isPhoneRouter = "login.loginHandler.isPhone"; //注册新用户
 var userUpdateRouter = "user.userHandler.updateInfo"; //更新用户信息
 var userAddGoldRouter = "user.storeHandler.addGold"; //增加金币
 var userUpdateAccount = 'user.userHandler.updateAccount';//更改用户名
@@ -182,7 +183,7 @@ Servers.getAddGold = function(playerId,gold,diamond,cb){
  * @param userId
  * @param password
  * @param cb 登录成功返回code=200  加密token信息
- */
+ 
 Servers.getLogin = function(userId, password, cb) {
     pomelo.init({
         host: loginHost,
@@ -194,18 +195,40 @@ Servers.getLogin = function(userId, password, cb) {
         });
     });
 };
+*/
 
+Servers.getLogin = function(phone_num, password, cb) {
+    pomelo.init({
+        host: loginHost,
+        port: loginPort
+    }, function () {
+        pomelo.request(loginRouter, {phone_num: phone_num, password: password}, function (data) {
+            cb(data);
+        });
+    });
+};
+
+Servers.getIsPhone = function(phone_num, cb) {
+    pomelo.init({
+        host: loginHost,
+        port: loginPort
+    }, function () {
+        pomelo.request(isPhoneRouter, {phone_num: phone_num}, function (data) {
+            cb(data);
+        });
+    });
+};
 /**
  * 用户注册
  * @param imei
  * @param cb 注册成功返回code=200，加密token
  */
-Servers.getRegister = function(imei, cb) {
+Servers.getRegister = function(phone_num,nick_name,password,sign_text,sex_type, cb) {
     pomelo.init({
         host: loginHost,
         port: loginPort
     }, function () {
-        pomelo.request(registerRouter, {imei: imei}, function (data) {
+        pomelo.request(registerRouter, {phone_num: phone_num,nick_name:nick_name,password:password,sign_text:sign_text,sex_type:sex_type}, function (data) {
         	console.log("get register server succ......");
             cb(data);
         });
