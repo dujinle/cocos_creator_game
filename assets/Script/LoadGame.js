@@ -7,9 +7,6 @@ cc.Class({
 		rate:0,
 		source_leng:58,
     },
-    login(){
-		cc.director.loadScene("LoginScene");
-	},
     onLoad () {
 		this.source_leng = 96;
 		this.load_res();
@@ -21,7 +18,7 @@ cc.Class({
 		cc.log("this.rate:" + this.rate);
 		if(this.rate >= this.source_leng){
 			this.unschedule(this.load_update);
-			this.login();
+			cc.director.loadScene("LoginScene");
 		}
 	},
 	load_res(){

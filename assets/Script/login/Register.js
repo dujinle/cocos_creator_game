@@ -8,6 +8,8 @@ cc.Class({
 		pwd_box:cc.Node,
 		repwd_box:cc.Node,
 		ptip_label:cc.Label,
+		nick_label:cc.Label,
+		pwd_label:cc.Label,
 		rtip_label:cc.Label,
 		rbutton:cc.Button,
 		sex_nan:cc.Node,
@@ -17,6 +19,7 @@ cc.Class({
 		sign_text:null,
 		sex_type:null,
 		password:null,
+		repwd:null,
     },
 	
     onLoad () {
@@ -24,11 +27,9 @@ cc.Class({
 		this.sex_nan.active = true;
 		this.sex_type = 1;
 		this.sex_nv.active = false;
-		this.rbutton.getComponent(cc.Button).interactable = false;
 	},
 	input_phone_begin(){
 		this.ptip_label.string = "";
-		this.phone_num = this.phone_box.getComponent(cc.EditBox).string;
 	},
 	input_phone_end(){
 		var self = this;
@@ -41,19 +42,18 @@ cc.Class({
 		});
 	},
 	input_name_begin(){
-		this.nick_name = this.name_box.getComponent(cc.EditBox).string;
+		this.nick_label.string = "";
 	},
 	input_name_end(){
 		this.nick_name = this.name_box.getComponent(cc.EditBox).string;
 	},
 	input_qianming_begin(){
-		this.sign_text = this.qianming_box.getComponent(cc.EditBox).string;
 	},
 	input_qianming_end(){
 		this.sign_text = this.qianming_box.getComponent(cc.EditBox).string;
 	},
 	input_pwd_begin(){
-		this.password = this.pwd_box.getComponent(cc.EditBox).string;
+		this.pwd_label.string = "";
 	},
 	input_pwd_end(){
 		this.password = this.pwd_box.getComponent(cc.EditBox).string;
@@ -62,7 +62,8 @@ cc.Class({
 		this.rtip_label.string = "";
 	},
 	input_rpwd_end(){
-		if(this.password != this.repwd_box.getComponent(cc.EditBox).string){
+		this.repwd = this.repwd_box.getComponent(cc.EditBox).string;
+		if(this.password != this.repwd){
 			this.rtip_label.string = "密码不匹配";
 			this.rbutton.getComponent(cc.Button).interactable = false;
 		}else{
@@ -86,6 +87,22 @@ cc.Class({
 	onRegister(){
 		var self = this;
 		var size = cc.director.getVisibleSize();
+		if(this.phone_num == null || this.phone_num == ""){
+			this.ptip_label.string = "手机号不能为空";
+			return ;
+		}
+		if(this.nick_name == null || this.nick_name == ""){
+			this.nick_label.string = "昵称不能为空";
+			return ;
+		}
+		if(this.password == null || this.password == ""){
+			this.pwd_label.string = "密码不能为空";
+			return ;
+		}
+		if(this.repwd == null || this.repwd == ""){
+			this.rtip_label.string = "密码输入不正确";
+			return ;
+		}
 		Servers.getRegister(this.phone_num,this.nick_name,this.password,this.sign_text,this.sex_type,function(data){
 			util.show_error_info(self,size,data.msg);
 			if(data.code == 200){

@@ -10,11 +10,13 @@ cc.Class({
 		auto_login:false,
 		retain_pwd_node:cc.Node,
 		auto_login_node:cc.Node,
+		tip_label:cc.Label,
 		login_type:null,
 		
     },
 	input_phone_begin(){
 		cc.log("start input phone number......");
+		this.tip_label.string = "";
 	},
 	input_phone_change(){
 		this.telephone = this.phone_ebox.getComponent(cc.EditBox).string;
@@ -26,6 +28,7 @@ cc.Class({
 	},
 	input_pwd_begin(){
 		cc.log("start input password......");
+		this.tip_label.string = "";
 	},
 	input_pwd_change(){
 		this.password = this.pwd_ebox.getComponent(cc.EditBox).string;
@@ -40,13 +43,13 @@ cc.Class({
 		var size = cc.director.getVisibleSize();
 		cc.log("onLogin",self.telephone,self.password);
 		if(self.telephone == null || self.password == null){
-			util.show_error_info(self,size,"用户名密码不能为空");
+			self.tip_label.string = "用户名密码不能为空";
 			return ;
 		}
 		Servers.getLogin(self.telephone, self.password, function (data) {
 			console.log("get login info succ:" + JSON.stringify(data));
 			if(data.code != 200){
-				util.show_error_info(self,size,data.msg);
+				self.tip_label.string = data.msg;
 				return;
 			}
 			var token = data.token;
