@@ -46,6 +46,10 @@ cc.Class({
 			self.tip_label.string = "用户名密码不能为空";
 			return ;
 		}
+		if(self.telephone == "" || self.password == ""){
+			self.tip_label.string = "用户名密码不能为空";
+			return ;
+		}
 		Servers.getLogin(self.telephone, self.password, function (data) {
 			console.log("get login info succ:" + JSON.stringify(data));
 			if(data.code != 200){
@@ -107,6 +111,9 @@ cc.Class({
 				this.password = Storage.getPassword();
 				this.telephone = Storage.getPhoneNumber();
 				if(this.password == null || this.telephone == null){
+					return false;
+				}
+				if(this.password == "" || this.telephone == ""){
 					return false;
 				}
 				this.phone_ebox.getComponent(cc.EditBox).string = this.telephone;
