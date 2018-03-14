@@ -323,6 +323,17 @@ cc.Class({
             cc.director.loadScene("MainScene");
         })
 	},
+	callback_uinfo(event,id){
+		var self = this;
+		var player = this.players[id];
+		var player_com = player.getComponent("zjh_player");
+		pomelo.request(util.getGameRoute(),{
+            process : 'get_uinfo',
+			location:player_com.position_server
+        },function(data){
+            console.log("-----quit------"+JSON.stringify(data));
+        })
+	},
 	showRoomMessageUpdate(){
 		var betString = this.bet;
 		this.danzhu_label.string = betString;
@@ -338,6 +349,7 @@ cc.Class({
 		pomelo.on('onAdd',this.onAdd_function.bind(this));
 		pomelo.on('onNoRound',this.onNoRound_function.bind(this));
 		pomelo.on('onFapai',this.onFapai_function.bind(this));
+		pomelo.on('onGetUinfo',this.onGetUinfo_function.bind(this));
 		pomelo.on('onShoupai',this.onShoupai_function.bind(this));
 		pomelo.on('onOpen',this.onOpen_function.bind(this));
 		pomelo.on('onThrow',this.onThrow_function.bind(this));
@@ -819,7 +831,20 @@ cc.Class({
 		this.node.addChild(pop_game_finish);
 		pop_game_finish.setPosition(this.node.convertToNodeSpaceAR(cc.p(x,y)));
 	},
-	
+	onGetUinfo_function(data){
+		console.log("onNoRound:"+JSON.stringify(data));
+		var size = cc.director.getWinSize();
+		//显示玩家信息
+		this.uinfo = cc.instantiate(g_assets["pop_game_user"]);
+		var uinfo_com = this.uinfo.getComponent("pop_game_user");
+		
+		uinfo_com.init_info(data,this.actionSendGift);
+		this.node.addChild(this.uinfo);
+		this.uinfo.setPosition(this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
+	},
+	actionSendGift(type,location){
+		cc.log(type,location);
+	},
 	actionFaPai(){
     	var size=cc.director.getVisibleSize();
     	var isFind=false;
