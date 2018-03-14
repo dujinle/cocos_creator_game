@@ -6,6 +6,9 @@ cc.Class({
 		shoe_active:cc.Node,
 		egg_active:cc.Node,
 		bomb_active:cc.Node,
+		kiss_active:cc.Node,
+		flower_active:cc.Node,
+		cheers_active:cc.Node,
 		show_type:0,
 		is_finish:false,
 		anim:null,
@@ -16,7 +19,10 @@ cc.Class({
 		this.shoe_active.active = false;
 		this.egg_active.active = false;
 		this.bomb_active.active = false;
-		this.show_bomb();
+		this.kiss_active.active = false;
+		this.flower_active.active = false;
+		this.cheers_active.active = false;
+		//this.show_cheers();
 	},
 	onFinished(){
 		cc.log("shoe active finish",this.isValid);
@@ -26,7 +32,14 @@ cc.Class({
 			this.egg_active.active = false;
 		}else if(this.show_type == 3){
 			this.bomb_active.active = false;
+		}else if(this.show_type == 4){
+			this.kiss_active.active = false;
+		}else if(this.show_type == 5){
+			this.flower_active.active = false;
+		}else if(this.show_type == 6){
+			this.cheers_active.active = false;
 		}
+		
 		this.is_finish = true;
 		this.is_start = false;
 		this.node.parent = null;
@@ -73,5 +86,47 @@ cc.Class({
 		this.animStatus.wrapMode = cc.WrapMode.Loop;
 		// 设置动画循环次数为2次
 		this.animStatus.repeatCount = 1;
-	}
+	},
+	show_kiss(){
+		this.show_type = 4;
+		this.kiss_active.active = true;
+		this.anim = this.kiss_active.getComponent(cc.Animation);
+		this.anim.on('finished',  this.onFinished,this);
+		this.animStatus = this.anim.play("kiss_active");
+		this.is_start = true;
+		// 设置循环模式为 Normal
+		this.animStatus.wrapMode = cc.WrapMode.Normal;
+		// 设置循环模式为 Loop
+		this.animStatus.wrapMode = cc.WrapMode.Loop;
+		// 设置动画循环次数为2次
+		this.animStatus.repeatCount = 1;
+	},
+	show_flower(){
+		this.show_type = 5;
+		this.flower_active.active = true;
+		this.anim = this.flower_active.getComponent(cc.Animation);
+		this.anim.on('finished',  this.onFinished,this);
+		this.animStatus = this.anim.play("flower_active");
+		this.is_start = true;
+		// 设置循环模式为 Normal
+		this.animStatus.wrapMode = cc.WrapMode.Normal;
+		// 设置循环模式为 Loop
+		this.animStatus.wrapMode = cc.WrapMode.Loop;
+		// 设置动画循环次数为2次
+		this.animStatus.repeatCount = 1;
+	},
+	show_cheers(){
+		this.show_type = 6;
+		this.cheers_active.active = true;
+		this.anim = this.cheers_active.getComponent(cc.Animation);
+		this.anim.on('finished',  this.onFinished,this);
+		this.animStatus = this.anim.play("cheers_active");
+		this.is_start = true;
+		// 设置循环模式为 Normal
+		this.animStatus.wrapMode = cc.WrapMode.Normal;
+		// 设置循环模式为 Loop
+		this.animStatus.wrapMode = cc.WrapMode.Loop;
+		// 设置动画循环次数为2次
+		this.animStatus.repeatCount = 1;
+	},
 });
