@@ -22,7 +22,7 @@ cc.Class({
 		this.kiss_active.active = false;
 		this.flower_active.active = false;
 		this.cheers_active.active = false;
-		//this.show_cheers();
+		this.show_shoe();
 	},
 	onFinished(){
 		cc.log("shoe active finish",this.isValid);
@@ -45,19 +45,37 @@ cc.Class({
 		this.node.parent = null;
 		this.node.destroy();
 	},
-	show_shoe(){
-		this.show_type = 1;
-		this.shoe_active.active = true;
-		this.anim = this.shoe_active.getComponent(cc.Animation);
-		this.anim.on('finished',  this.onFinished,this);
-		this.animStatus = this.anim.play("shoe_active");
-		this.is_start = true;
-		// 设置循环模式为 Normal
-		this.animStatus.wrapMode = cc.WrapMode.Normal;
-		// 设置循环模式为 Loop
-		this.animStatus.wrapMode = cc.WrapMode.Loop;
-		// 设置动画循环次数为2次
-		this.animStatus.repeatCount = 1;
+	show_shoe(s_pos,e_pos){
+		var self = this;
+		cc.loader.loadResDir("",cc.SpriteFrame,function (err, assets) {
+			for(var i = 0;i < assets.length;i++){
+				g_assets[assets[i].name] = assets[i];
+				self.rate = self.rate + 1;
+				cc.log("load res :" + assets[i].name);
+			}
+		});
+		cc.loader.loadResDir("prefab",function (err, assets) {
+			for(var i = 0;i < assets.length;i++){
+				g_assets[assets[i].name] = assets[i];
+				self.rate = self.rate + 1;
+				cc.log("load res :" + assets[i].name);
+			}
+			var shoe_active = cc.instantiate(g_assets["shoe_active"]);
+			self.node.addChild(shoe_active);
+			shoe_active.setPosition(cc.p(0,0));
+			var move = cc.moveTo(0.5,cc.p(100,100));
+			var rotation = cc.rotateBy(0.5,360);
+			var spawn = cc.spawn(move,rotation);
+			shoe_active.runAction(move);
+			var anim = shoe_active.getComponent(cc.Animation);
+			var animStatus = anim.play("shoe_active");
+			// 设置循环模式为 Normal
+			animStatus.wrapMode = cc.WrapMode.Normal;
+			// 设置循环模式为 Loop
+			animStatus.wrapMode = cc.WrapMode.Loop;
+			// 设置动画循环次数为2次
+			animStatus.repeatCount = 1;
+		});
 	},
 	show_egg(){
 		this.show_type = 2;

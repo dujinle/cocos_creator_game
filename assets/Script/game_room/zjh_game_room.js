@@ -329,7 +329,8 @@ cc.Class({
 		var player_com = player.getComponent("zjh_player");
 		pomelo.request(util.getGameRoute(),{
             process : 'get_uinfo',
-			location:player_com.position_server
+			send_from:g_myselfPlayerPos,
+			send_to:player_com.position_server
         },function(data){
             console.log("-----quit------"+JSON.stringify(data));
         })
@@ -835,15 +836,68 @@ cc.Class({
 		console.log("onNoRound:"+JSON.stringify(data));
 		var size = cc.director.getWinSize();
 		//显示玩家信息
-		this.uinfo = cc.instantiate(g_assets["pop_game_user"]);
-		var uinfo_com = this.uinfo.getComponent("pop_game_user");
-		
-		uinfo_com.init_info(data,this.actionSendGift);
-		this.node.addChild(this.uinfo);
-		this.uinfo.setPosition(this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
+		if(data["send_from"] == g_myselfPlayerPos){
+			this.uinfo = cc.instantiate(g_assets["pop_game_user"]);
+			var uinfo_com = this.uinfo.getComponent("pop_game_user");
+			
+			uinfo_com.init_info(data,this.actionSendGift);
+			this.node.addChild(this.uinfo);
+			this.uinfo.setPosition(this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
+		}
 	},
-	actionSendGift(type,location){
-		cc.log(type,location);
+	actionSendGift(pnode,type,send_from,send_to){
+		cc.log("actionSendGift",type,send_from,send_to);
+		var s_player = null;
+		var e_player = null;
+		var all_players = g_players.concat(g_players_noPower);
+		if(send_from == send_to){
+			return false;
+		}
+		for(var i = 0;i < all_players.length;i++){
+			var player_com = all_players[i].getComponent("zjh_player");
+			if(player_com.position_server == send_from){
+				s_player = all_players[i];
+			}
+			if(player_com.position_server == send_to){
+				e_player = all_players[i];
+			}
+		}
+		var active = null;
+		//送鸡蛋
+		if(type == 1){
+			active = cc.instantiate(g_assets["shoe_active"]);
+		}else if(type == 2){
+			active = cc.instantiate(g_assets["egg_active"]);
+		}else if(type == 3){
+			active = cc.instantiate(g_assets["bomb_active"]);
+		}else if(type == 4){
+			active = cc.instantiate(g_assets["kiss_active"]);
+		}else if(type == 5){
+			active = cc.instantiate(g_assets["flower_active"]);
+		}else if(type == 6){
+			active = cc.instantiate(g_assets["cheers_active"]);
+		}
+		pnode.addChild(active);
+		active.setPosition(s_player.getPosition());
+		
+		var move = cc.moveTo(0.5,e_player.getPosition());
+		var rotation = cc.rotateBy(0.5,360);
+		var spawn = cc.spawn(move,rotation);
+		var self = this;
+		var sendAction = cc.callFunc(function(){
+			var anim = active.getComponent(cc.Animation);
+			anim.on('finished',  function(){
+				active.destroy();
+			},null);
+			var animStatus = anim.play("egg_active");
+			// 设置循环模式为 Normal
+			animStatus.wrapMode = cc.WrapMode.Normal;
+			// 设置循环模式为 Loop
+			animStatus.wrapMode = cc.WrapMode.Loop;
+			// 设置动画循环次数为2次
+			animStatus.repeatCount = 1;
+		});
+		active.runAction(cc.sequence(spawn,sendEggAction));
 	},
 	actionFaPai(){
     	var size=cc.director.getVisibleSize();

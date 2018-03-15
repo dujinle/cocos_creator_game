@@ -3863,6 +3863,24 @@
     "bg_sprite": {
       "__id__": 3
     },
+    "shoe_node": {
+      "__id__": 86
+    },
+    "egg_node": {
+      "__id__": 91
+    },
+    "bomb_node": {
+      "__id__": 96
+    },
+    "kiss_node": {
+      "__id__": 101
+    },
+    "flower_node": {
+      "__id__": 106
+    },
+    "cheer_node": {
+      "__id__": 111
+    },
     "vnickname_lable": {
       "__id__": 71
     },

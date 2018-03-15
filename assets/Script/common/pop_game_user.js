@@ -4,6 +4,12 @@ cc.Class({
     properties: {
         /*player layer 里面的参数设置*/
 		bg_sprite:cc.Node,
+		shoe_node:cc.Node,
+		egg_node:cc.Node,
+		bomb_node:cc.Node,
+		kiss_node:cc.Node,
+		flower_node:cc.Node,
+		cheer_node:cc.Node,
         vnickname_lable:cc.Label,
         vacount_label:cc.Label,
         vlevel_label:cc.Label,
@@ -60,13 +66,16 @@ cc.Class({
 		this.node.active = true;
 		this.call_back = call_back;
 		this.location = data["location"];
+		this.send_from = data["send_from"];
 	},
 	hide(){
 		this.node.active = false;
 	},
 	button_call(event,type){
 		cc.log("button call",type);
-		this.call_back(type,this.location);
+		this.node.active = false;
+		this.node.destroy();
+		this.call_back(this.node.parent,type,this.send_from,this.location);
 	},
 	test_t(){
 		this.vnickname_lable.string = "11111111";
