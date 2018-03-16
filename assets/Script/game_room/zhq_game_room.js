@@ -331,6 +331,18 @@ cc.Class({
 			console.log(data.msg);
 		});
 	},
+	callback_uinfo(event,id){
+		var self = this;
+		var player = this.players[id];
+		var player_com = player.getComponent("zjh_player");
+		pomelo.request(util.getGameRoute(),{
+            process : 'get_uinfo',
+			send_from:g_myselfPlayerPos,
+			send_to:player_com.position_server
+        },function(data){
+            console.log("-----quit------"+JSON.stringify(data));
+        })
+	},
 	callback_setting(){
 		var self = this;
 		var size = cc.director.getVisibleSize();
@@ -376,6 +388,7 @@ cc.Class({
     	pomelo.on('onReady',this.onReady_function.bind(this));
 		pomelo.on('onAdd',this.onAdd_function.bind(this));
 		pomelo.on('onNoRound',this.onNoRound_function.bind(this));
+		pomelo.on('onGetUinfo',this.onGetUinfo_function.bind(this));
 		pomelo.on('onFaPai',this.onFapai_function.bind(this));
 		pomelo.on('onShoupai',this.onShoupai_function.bind(this));
 		pomelo.on('onShoupaiFirst',this.onShoupaiFirst_function.bind(this));
@@ -965,7 +978,81 @@ cc.Class({
 		this.node.addChild(pop_game_finish);
 		pop_game_finish.setPosition(this.node.convertToNodeSpaceAR(cc.p(x,y)));
 	},
-	
+	onGetUinfo_function(data){
+		console.log("onNoRound:"+JSON.stringify(data));
+		var size = cc.director.getWinSize();
+		//显示玩家信息
+		if(data["send_from"] == g_myselfPlayerPos){
+			this.uinfo = cc.instantiate(g_assets["pop_game_user"]);
+			var uinfo_com = this.uinfo.getComponent("pop_game_user");
+			
+			uinfo_com.init_info(data,this.actionSendGift);
+			this.node.addChild(this.uinfo);
+			this.uinfo.setPosition(this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
+		}
+	},
+	actionSendGift(pnode,type,send_from,send_to){
+		cc.log("actionSendGift",type,send_from,send_to);
+		var s_player = null;
+		var e_player = null;
+		var all_players = g_players.concat(g_players_noPower);
+		if(send_from == send_to){
+			return false;
+		}
+		for(var i = 0;i < all_players.length;i++){
+			var player_com = all_players[i].getComponent("zhq_player");
+			if(player_com.position_server == send_from){
+				s_player = all_players[i];
+			}
+			if(player_com.position_server == send_to){
+				e_player = all_players[i];
+			}
+		}
+		var active = null;
+		var active_name = null;
+		//送鸡蛋
+		if(type == 1){
+			active = cc.instantiate(g_assets["shoe_active"]);
+			active_name = "shoe_active";
+		}else if(type == 2){
+			active = cc.instantiate(g_assets["egg_active"]);
+			active_name = "egg_active";
+		}else if(type == 3){
+			active = cc.instantiate(g_assets["bomb_active"]);
+			active_name = "bomb_active";
+		}else if(type == 4){
+			active = cc.instantiate(g_assets["kiss_active"]);
+			active_name = "kiss_active";
+		}else if(type == 5){
+			active = cc.instantiate(g_assets["flower_active"]);
+			active_name = "flower_active";
+		}else if(type == 6){
+			active = cc.instantiate(g_assets["cheers_active"]);
+			active_name = "cheers_active";
+		}
+		pnode.addChild(active);
+		active.setPosition(s_player.getPosition());
+		
+		var move = cc.moveTo(0.5,e_player.getPosition());
+		var rotation = cc.rotateBy(0.5,360);
+		var spawn = cc.spawn(move,rotation);
+		var self = this;
+		var sendAction = cc.callFunc(function(){
+			var anim = active.getComponent(cc.Animation);
+			anim.on('finished',  function(){
+				active.destroy();
+			},null);
+			var animStatus = anim.play(active_name);
+			// 设置循环模式为 Normal
+			animStatus.wrapMode = cc.WrapMode.Normal;
+			// 设置循环模式为 Loop
+			animStatus.wrapMode = cc.WrapMode.Loop;
+			// 设置动画循环次数为2次
+			animStatus.repeatCount = 1;
+		});
+		active.runAction(cc.sequence(spawn,sendAction));
+	},
+
 	switchRadio(event) {
 		var card_com = event.target.getComponent("zhq_card");
         var suit = event.target.getComponent("zhq_card").suit;
@@ -1121,6 +1208,7 @@ cc.Class({
         pomelo.removeListener('onReady');
 		pomelo.removeListener('onAdd');
 		pomelo.removeListener('onNoRound');
+		pomelo.removeListener('onGetUinfo');
 		pomelo.removeListener('onFaPai');
         pomelo.removeListener('onShoupai');
         pomelo.removeListener('onShoupaiFirst');

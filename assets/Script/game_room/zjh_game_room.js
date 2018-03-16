@@ -863,19 +863,26 @@ cc.Class({
 			}
 		}
 		var active = null;
+		var active_name = null;
 		//送鸡蛋
 		if(type == 1){
 			active = cc.instantiate(g_assets["shoe_active"]);
+			active_name = "shoe_active";
 		}else if(type == 2){
 			active = cc.instantiate(g_assets["egg_active"]);
+			active_name = "egg_active";
 		}else if(type == 3){
 			active = cc.instantiate(g_assets["bomb_active"]);
+			active_name = "bomb_active";
 		}else if(type == 4){
 			active = cc.instantiate(g_assets["kiss_active"]);
+			active_name = "kiss_active";
 		}else if(type == 5){
 			active = cc.instantiate(g_assets["flower_active"]);
+			active_name = "flower_active";
 		}else if(type == 6){
 			active = cc.instantiate(g_assets["cheers_active"]);
+			active_name = "cheers_active";
 		}
 		pnode.addChild(active);
 		active.setPosition(s_player.getPosition());
@@ -889,7 +896,7 @@ cc.Class({
 			anim.on('finished',  function(){
 				active.destroy();
 			},null);
-			var animStatus = anim.play("egg_active");
+			var animStatus = anim.play(active_name);
 			// 设置循环模式为 Normal
 			animStatus.wrapMode = cc.WrapMode.Normal;
 			// 设置循环模式为 Loop
@@ -897,7 +904,7 @@ cc.Class({
 			// 设置动画循环次数为2次
 			animStatus.repeatCount = 1;
 		});
-		active.runAction(cc.sequence(spawn,sendEggAction));
+		active.runAction(cc.sequence(spawn,sendAction));
 	},
 	actionFaPai(){
     	var size=cc.director.getVisibleSize();
@@ -1239,6 +1246,7 @@ cc.Class({
 	pomelo_removeListener(){
 		cc.log("remove listener");
         pomelo.removeListener('onReady');
+		pomelo.removeListener('onGetUinfo');
         pomelo.removeListener('onFollow');
         pomelo.removeListener('onAddChip');
         pomelo.removeListener('onAdd');
