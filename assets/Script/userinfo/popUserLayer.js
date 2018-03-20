@@ -1,18 +1,9 @@
-// Learn cc.Class:
-//  - [Chinese] http://www.cocos.com/docs/creator/scripting/class.html
-//  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/class/index.html
-// Learn Attribute:
-//  - [Chinese] http://www.cocos.com/docs/creator/scripting/reference/attributes.html
-//  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/reference/attributes/index.html
-// Learn life-cycle callbacks:
-//  - [Chinese] http://www.cocos.com/docs/creator/scripting/life-cycle-callbacks.html
-//  - [English] http://www.cocos2d-x.org/docs/editors_and_tools/creator-chapters/scripting/life-cycle-callbacks/index.html
-
 cc.Class({
     extends: cc.Component,
 
     properties: {
         /*user layer 里面的参数设置*/
+		bg_sprite:cc.Node,
         vnickname_lable:cc.Label,
         vacount_label:cc.Label,
         vlevel_label:cc.Label,
@@ -27,6 +18,7 @@ cc.Class({
 
     onLoad() {
         cc.log("start go into popUserLayer js");
+		var self = this;
         cc.eventManager.addListener({
             event: cc.EventListener.TOUCH_ONE_BY_ONE,
             swallowTouches: true,
@@ -42,11 +34,18 @@ cc.Class({
             onTouchMoved: function (touch, event) {            // 触摸移动时触发
             },
             onTouchEnded: function (touch, event) {            // 点击事件结束处理
-
+				var target=event.getCurrentTarget();
+				var local=target.convertToNodeSpace(touch.getLocation());
+				var s = target.getContentSize();
+				var rect = cc.rect(0, 0, s.width, s.height);
+				if (cc.rectContainsPoint(rect, local)){
+					cc.log("ok touch in the region......");
+				}else{
+					cc.log("touch remove from parent");
+					self.node.active = false;
+				}
             }
-         }, this.node);
-		 
-
+         }, this.bg_sprite);
     },
 	show(){
 		this.vnickname_lable.string = g_user.nickName;
@@ -69,9 +68,4 @@ cc.Class({
     exit(){
     
     },
-    start () {
-
-    },
-
-    // update (dt) {},
 });

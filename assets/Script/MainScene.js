@@ -6,7 +6,6 @@ cc.Class({
         fangka_label:cc.Label,
         diamond_label:cc.Label,
         sex_sprite:cc.Sprite,
-        user_layer:cc.Node,
         game_layout:cc.Node,
         entergame_layout:cc.Node,
         pop_zjhgame_layer:cc.Node,
@@ -30,10 +29,12 @@ cc.Class({
     },
     popUserLayer(){
         cc.log("start init pop user layer info");
-		this.user_layer.getComponent("popUserLayer").show();
-    },
-	ExitUserLayer(){
-		this.user_layer.getComponent("popUserLayer").hide();
+		var size = cc.director.getWinSize();
+		this.user_layer = cc.instantiate(g_assets["pop_userinfo"]);
+		var user_layer_com = this.user_layer.getComponent("popUserLayer");
+		this.node.addChild(this.user_layer);
+		this.user_layer.setPosition(this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
+		user_layer_com.show();
     },
     enterGameLayer(event,customEventData){
         cc.log("enterGameLayer type:" + customEventData);
