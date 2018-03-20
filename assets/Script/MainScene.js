@@ -8,10 +8,6 @@ cc.Class({
         sex_sprite:cc.Sprite,
         game_layout:cc.Node,
         entergame_layout:cc.Node,
-        pop_zjhgame_layer:cc.Node,
-		pop_tdkgame_layer:cc.Node,
-		pop_zhqgame_layer:cc.Node,
-		pop_enter_game_layer:cc.Node,
     },
 
     // LIFE-CYCLE CALLBACKS:
@@ -48,17 +44,27 @@ cc.Class({
     },
     popCreateGameLayer(){
         cc.log("got info createGameLayer......");
+		var size = cc.director.getWinSize();
 		if(g_game_type == "ZJH"){
-			this.pop_zjhgame_layer.active = true;
+			this.pop_game_layer = cc.instantiate(g_assets["pop_creat_zjh_game"]);
+			this.node.addChild(this.pop_game_layer);
+			this.pop_game_layer.setPosition(this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
 		}else if(g_game_type == "TDK"){
-			this.pop_tdkgame_layer.active = true;
+			this.pop_game_layer = cc.instantiate(g_assets["pop_creat_tdk_game"]);
+			this.node.addChild(this.pop_game_layer);
+			this.pop_game_layer.setPosition(this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
 		}else if(g_game_type == "ZHQ"){
-			this.pop_zhqgame_layer.active = true;
+			this.pop_game_layer = cc.instantiate(g_assets["pop_creat_zhq_game"]);
+			this.node.addChild(this.pop_game_layer);
+			this.pop_game_layer.setPosition(this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
 		}
     },
 	popEnterGameLayer(){
-		this.pop_enter_game_layer.active = true;
 		cc.log("go into popEnterGameLayer......");
+		var size = cc.director.getWinSize();
+		this.pop_enter_game_layer = cc.instantiate(g_assets["pop_enter_game"]);
+		this.node.addChild(this.pop_enter_game_layer);
+		this.pop_enter_game_layer.setPosition(this.node.convertToNodeSpaceAR(cc.p(size.width/2,size.height/2)));
 	},
 	store_scene(){
 		cc.director.loadScene("StoreScene");
